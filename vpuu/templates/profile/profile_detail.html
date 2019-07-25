@@ -1,0 +1,41 @@
+{% extends 'profile/profile_detail.html' %}{% load lookup staticfiles %}
+
+{% block profile_javascript_libs %}
+{{ block.super }}
+<script src="{% static 'js/maps_mapit.js' %}"></script>
+<script src="{% static 'js/profile_map_mapit.js' %}"></script>
+<script src="{% static 'js/affix.js' %}"></script>
+<script src="{% static 'js/profiles.js' %}"></script>
+
+{% endblock %}
+
+{% block body_javascript_extra %}
+{{ block.super }}
+
+{% if crime %}
+  <script type="text/javascript">
+  $('#citations ul').append(
+    $('<li>')
+      .append($('<b>').append('{{ crime.metadata.release }}' + ': '))
+      .append('{{ crime.metadata.citation }}')
+      .append(_.escape('<' + window.location.href + '>'))
+  );
+  </script>
+{% endif %}
+
+<script type="text/javascript">
+$('.release-list').hover(function() {
+    $(this).find('.sub-group').toggle();
+});
+</script>
+
+{% if head2head %}
+<script type="text/javascript">
+  var releaseLinks = $('.release-list').find('li a');
+  $.each(releaseLinks, function(i, a) {
+    a.pathname = parent.location.pathname;
+  });
+</script>
+{% endif %}
+
+{% endblock %}

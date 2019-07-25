@@ -1,0 +1,24 @@
+{% extends 'homepage.html' %}{% load staticfiles %}
+
+{% block head_title %}
+    {{ block.super }}
+{% endblock %}
+
+{% block head_meta_description %}
+    {{ block.super }}
+{% endblock %}
+
+{% block place_finder %}
+  {{block.super}}
+{% endblock %}
+
+{% block homepage_detail %}
+  {{block.super}}
+{% endblock %}
+
+{% block homepage_javascripb_libs %}
+{{ block.super }}
+<script src="{% static 'js/maps_mapit.js' %}"></script>
+
+{% endblock %}
+

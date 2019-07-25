@@ -1,0 +1,190 @@
+/* Define the styles to use accross all the instances of Wazimap-ZA*/
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  padding-top: 25px;
+  height: 0;
+}
+
+#help .video-wrapper {
+  margin-bottom: 40px;
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-header-help i {
+  float: right;
+  font-size: 20px;
+  line-height: 20px;
+}
+
+.wazi-lightbox .featherlight-content {
+  background: $background-bg-color;
+}
+
+.wazi-lightbox .featherlight-close {
+  background: $brand-secondary-color;
+  color: #fff;
+}
+
+.wazi-lightbox .lightbox-intro {
+  margin: 10px 25px;
+  display: inline-block;
+}
+
+.wazi-lightbox hr {
+  border-color: $brand-secondary-color;
+}
+
+#profile.profile-head2head-frame .floating-nav-wrapper {
+  display: none;
+}
+
+#profile .floating-nav-wrapper {
+  height: 55px;
+}
+
+#profile .floating-nav {
+  z-index: 1500;
+  width: 100%;
+  padding: 0.5em;
+  background-color: $footer-bg-color;
+}
+
+#profile .floating-nav.affix {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25);
+}
+
+#profile .floating-nav h3 {
+  margin-bottom: 0.5em;
+  display: none;
+}
+
+#profile .floating-nav h3 img {
+  width: auto;
+  height: 17px;
+  margin-right: 10px;
+  vertical-align: text-bottom;
+}
+
+#profile .floating-nav.affix h3 {
+  display: block;
+}
+
+#profile .floating-nav ul {
+  margin: 0px;
+  padding: 0px;
+}
+
+#profile .floating-nav li {
+  display: inline-block;
+  float: left;
+  margin-right: 20px;
+  text-align: center;
+}
+
+#profile .floating-nav li a {
+  display: block;
+  text-decoration: none;
+}
+
+#profile .floating-nav li a span {
+  display: block;
+}
+
+#profile .floating-nav li a .fa {
+  font-size: 18px;
+}
+
+@media only screen and (max-width: 768px) {
+  #profile .floating-nav-wrapper {
+    display: none;
+  }
+}
+
+#banner {
+  background-color: $brand-primary-bg-color;
+  color: white;
+}
+
+#banner a {
+  color: white;
+  font-weight: bold;
+}
+
+button.action-button {
+  padding: 5px 8px;
+  border: 0px;
+}
+
+.fa.fa-child.fa-tiny {
+  font-size: 12px !important;
+}
+
+.showcase {
+  margin-top: 15px;
+}
+
+.showcase img {
+  width: 100%;
+  margin-bottom: 15px;
+}
+
+.showcase a {
+  text-decoration: none;
+}
+
+#citations {
+    h2 {
+      padding-left: 0.8em;
+      font-size: 1em;
+    }
+
+    ul {
+        font-size: 0.8em;
+        list-style: none;
+        margin-bottom: 30px;
+        padding-left: 1em;
+
+        li {
+            margin-bottom: 5px;
+        }
+    }
+}
+
+.chart-qualifier {
+  margin: 0.3em 0.5em 0;
+}
+
+#cover-profile {
+  .release-list {
+    margin-left: 5px;
+
+    ul {
+      font-size: 1em;
+    }
+
+    a {
+      margin-top: 0;
+    }
+  }
+}
+
+#change-release {
+  padding-left: 0.8em;
+  margin-bottom: 1em;
+  .release-name {
+      margin-right: 1em;
+  }
+}

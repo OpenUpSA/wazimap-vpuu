@@ -1,0 +1,10 @@
+{% extends 'profile/head2head.html' %}
+{% load static %}
+{% block body_javascript_extra %}
+{{ block.super }}
+
+{% if geo1_release_year != geo2_release_year %}
+<script type="text/javascript" src="{% static 'js/wazimap_release_warning.js' %}"></script>
+{% endif %}
+
+{% endblock %}
