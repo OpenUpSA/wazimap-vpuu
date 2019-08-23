@@ -5,12 +5,13 @@ import logging
 from wazimap.data.tables import get_datatable, get_table_id
 from wazimap.data.utils import get_session, add_metadata
 from wazimap.geo import geo_data
+from dynamic_profile.models import IndicatorProfile, Profile
+from dynamic_profile.utils import get_dynamic_profiles, merge_dicts
 
 from wazimap.data.utils import (
     collapse_categories,
     calculate_median,
     calculate_median_stat,
-    merge_dicts,
     group_remainder,
     get_stat_data,
     percent,
@@ -18,469 +19,11 @@ from wazimap.data.utils import (
     dataset_context,
 )
 
-from .elections import get_elections_profile
-
 
 log = logging.getLogger(__name__)
 
 
-PROFILE_SECTIONS = (
-    "demographics",  # population group, age group in 5 years, age in completed years
-    "economics",  # individual monthly income, type of sector, official employment status
-    "service_delivery",  # source of water, refuse disposal
-    "education",  # highest educational level
-    "households",  # household heads, etc.
-    "children",  # child-related stats
-    "child_households",  # households headed by children
-)
-
-# Education categories
-
-COLLAPSED_ATTENDANCE_CATEGORIES = {
-    "Unspecified": "Other",
-    "Not applicable": "Other",
-    "Do not know": "Other",
-}
-COLLAPSED_EDUCATION_CATEGORIES = {
-    "Gade 0": "Some primary",
-    "Grade 1 / Sub A": "Some primary",
-    "Grade 2 / Sub B": "Some primary",
-    "Grade 3 / Std 1/ABET 1Kha Ri Gude;SANLI": "Some primary",
-    "Grade 4 / Std 2": "Some primary",
-    "Grade 5 / Std 3/ABET 2": "Some primary",
-    "Grade 6 / Std 4": "Some primary",
-    "Grade 7 / Std 5/ ABET 3": "Primary",
-    "Grade 8 / Std 6 / Form 1": "Some secondary",
-    "Grade 9 / Std 7 / Form 2/ ABET 4": "Some secondary",
-    "Grade 10 / Std 8 / Form 3": "Some secondary",
-    "Grade 11 / Std 9 / Form 4": "Some secondary",
-    "Grade 12 / Std 10 / Form 5": "Grade 12 (Matric)",
-    "NTC I / N1/ NIC/ V Level 2": "Some secondary",
-    "NTC II / N2/ NIC/ V Level 3": "Some secondary",
-    "NTC III /N3/ NIC/ V Level 4": "Grade 12 (Matric)",
-    "N4 / NTC 4": "N/A",
-    "N5 /NTC 5": "N/A",
-    "N6 / NTC 6": "Undergrad",
-    "Certificate with less than Grade 12 / Std 10": "Some secondary",
-    "Diploma with less than Grade 12 / Std 10": "Some secondary",
-    "Certificate with Grade 12 / Std 10": "Grade 12 (Matric)",
-    "Diploma with Grade 12 / Std 10": "Grade 12 (Matric)",
-    "Higher Diploma": "Undergrad",
-    "Post Higher Diploma Masters; Doctoral Diploma": "Post-grad",
-    "Bachelors Degree": "Undergrad",
-    "Bachelors Degree and Post graduate Diploma": "Post-grad",
-    "Honours degree": "Post-grad",
-    "Higher Degree Masters / PhD": "Post-grad",
-    "Other": "Other",
-    "No schooling": "None",
-    "Unspecified": "N/A",
-    "Not applicable": "N/A",
-    # CS 2016:
-    "Grade 0": "Some primary",
-    "Grade 1/Sub A/Class 1": "Some primary",
-    "Grade 2/Sub B/Class 2": "Some primary",
-    "Grade 3/Standard 1/ABET 1": "Some primary",
-    "Grade 4/Standard 2": "Some primary",
-    "Grade 5/Standard 3/ABET 2": "Some primary",
-    "Grade 6/Standard 4": "Some primary",
-    "Grade 7/Standard 5/ABET 3": "Primary",
-    "Grade 8/Standard 6/Form 1": "Some secondary",
-    "Grade 9/Standard 7/Form 2/ABET 4/Occupational certificate NQF Level 1": "Some secondary",
-    "Grade 10/Standard 8/Form 3/Occupational certificate NQF Level 2": "Some secondary",
-    "Grade 11/Standard 9/Form 4/NCV Level 3/ Occupational certificate NQF Level 3": "Some secondary",
-    "Certificate with less than Grade 12/Std 10": "Some secondary",
-    "Diploma with less than Grade 12/Std 10": "Some secondary",
-    "Grade 12/Standard 10/Form 5/Matric/NCV Level 4/ Occupational certificate NQF Level 3": "Grade 12 (Matric)",
-    "Diploma with Grade 12/Std 10/Occupational certificate NQF Level 6": "Grade 12 (Matric)",
-    "Bachelors degree/Occupational certificate NQF Level 7": "Undergrad",
-    "Higher Diploma/Occupational certificate NQF Level 7": "Undergrad",
-    "Higher/National/Advanced Certificate with Grade 12/Occupational certificate NQF": "Post-grad",
-    "Honours degree/Post-graduate diploma/Occupational certificate NQF Level 8": "Post-grad",
-    "Masters/Professional Masters at NQF Level 9 degree": "Post-grad",
-    "PHD (Doctoral degree/Professional doctoral degree at NQF Level 10)": "Post-grad",
-    "Post-Higher Diploma (Masters)": "Post-grad",
-    "N4/NTC 4/Occupational certificate NQF Level 5": "N/A",
-    "N5/NTC 5/Occupational certificate NQF Level 5": "N/A",
-    "N6/NTC 6/Occupational certificate NQF Level 5": "Undergrad",
-    "NTC I/N1": "Some secondary",
-    "NTCII/N2": "Some secondary",
-    "NTCIII/N3": "Grade 12 (Matric)",
-    "Do not know": "N/A",
-}
-EDUCATION_GET_OR_HIGHER = set(
-    [
-        "Grade 9 / Std 7 / Form 2/ ABET 4",
-        "Grade 10 / Std 8 / Form 3",
-        "Grade 11 / Std 9 / Form 4",
-        "Grade 12 / Std 10 / Form 5",
-        "NTC I / N1/ NIC/ V Level 2",
-        "NTC II / N2/ NIC/ V Level 3",
-        "NTC III /N3/ NIC/ V Level 4",
-        "N4 / NTC 4",
-        "N5 /NTC 5",
-        "N6 / NTC 6",
-        "Certificate with less than Grade 12 / Std 10",
-        "Diploma with less than Grade 12 / Std 10",
-        "Certificate with Grade 12 / Std 10",
-        "Diploma with Grade 12 / Std 10",
-        "Higher Diploma",
-        "Post Higher Diploma Masters; Doctoral Diploma",
-        "Bachelors Degree",
-        "Bachelors Degree and Post graduate Diploma",
-        "Honours degree",
-        "Higher Degree Masters / PhD",
-    ]
-)
-
-EDUCATION_GET_OR_HIGHER_2016 = set(
-    [
-        "Grade 9/Standard 7/Form 2/ABET 4/Occupational certificate NQF Level 1",
-        "Grade 10/Standard 8/Form 3/Occupational certificate NQF Level 2",
-        "Grade 11/Standard 9/Form 4/NCV Level 3/ Occupational certificate NQF Level 3",
-        "Grade 12/Standard 10/Form 5/Matric/NCV Level 4/ Occupational certificate NQF Level 3",
-        "NTC I/N1",
-        "NTCII/N2",
-        "NTCIII/N3",
-        "N4/NTC 4/Occupational certificate NQF Level 5",
-        "N5/NTC 5/Occupational certificate NQF Level 5",
-        "N6/NTC 6/Occupational certificate NQF Level 5",
-        "Certificate with less than Grade 12/Std 10",
-        "Diploma with less than Grade 12/Std 10",
-        "Higher/National/Advanced Certificate with Grade 12/Occupational certificate NQF",
-        "Diploma with Grade 12/Std 10/Occupational certificate NQF Level 6",
-        "Higher Diploma/Occupational certificate NQF Level 7",
-        "Post-Higher Diploma (Masters)",
-        "Bachelors degree/Occupational certificate NQF Level 7",
-        "Honours degree/Post-graduate diploma/Occupational certificate NQF Level 8",
-        "Masters/Professional Masters at NQF Level 9 degree",
-        "PHD (Doctoral degree/Professional doctoral degree at NQF Level 10)",
-    ]
-)
-
-EDUCATION_FET_OR_HIGHER = set(
-    [
-        "Grade 12 / Std 10 / Form 5",
-        "N4 / NTC 4",
-        "N5 /NTC 5",
-        "N6 / NTC 6",
-        "Certificate with Grade 12 / Std 10",
-        "Diploma with Grade 12 / Std 10",
-        "Higher Diploma",
-        "Post Higher Diploma Masters; Doctoral Diploma",
-        "Bachelors Degree",
-        "Bachelors Degree and Post graduate Diploma",
-        "Honours degree",
-        "Higher Degree Masters / PhD",
-    ]
-)
-
-EDUCATION_FET_OR_HIGHER_2016 = set(
-    [
-        "Grade 12/Standard 10/Form 5/Matric/NCV Level 4/ Occupational certificate NQF Level 3",
-        "N4/NTC 4/Occupational certificate NQF Level 5",
-        "N5/NTC 5/Occupational certificate NQF Level 5",
-        "N6/NTC 6/Occupational certificate NQF Level 5",
-        "Higher/National/Advanced Certificate with Grade 12/Occupational certificate NQF",
-        "Diploma with Grade 12/Std 10/Occupational certificate NQF Level 6",
-        "Higher Diploma/Occupational certificate NQF Level 7",
-        "Post-Higher Diploma (Masters)",
-        "Bachelors degree/Occupational certificate NQF Level 7",
-        "Honours degree/Post-graduate diploma/Occupational certificate NQF Level 8",
-        "Masters/Professional Masters at NQF Level 9 degree",
-        "PHD (Doctoral degree/Professional doctoral degree at NQF Level 10)",
-    ]
-)
-
-EDUCATION_KEY_ORDER = (
-    "None",
-    "Other",
-    "Some primary",
-    "Primary",
-    "Some secondary",
-    "Grade 12 (Matric)",
-    "Undergrad",
-    "Post-grad",
-)
-
-# Age categories
-
-COLLAPSED_AGE_CATEGORIES = {
-    "00 - 04": "0-9",
-    "05 - 09": "0-9",
-    "10 - 14": "10-19",
-    "15 - 19": "10-19",
-    "20 - 24": "20-29",
-    "25 - 29": "20-29",
-    "30 - 34": "30-39",
-    "35 - 39": "30-39",
-    "40 - 44": "40-49",
-    "45 - 49": "40-49",
-    "50 - 54": "50-59",
-    "55 - 59": "50-59",
-    "60 - 64": "60-69",
-    "65 - 69": "60-69",
-    "70 - 74": "70-79",
-    "75 - 79": "70-79",
-    "80 - 84": "80+",
-    "85+": "80+",
-}
-
-# Income categories
-#
-# Note from StatsSA on different income categories between '2011 census'
-# and '2011 census along 2016 boundaries':
-# The community profile dataset (Census 2011) was based on the first version of
-# Census 2011 data released in 2013. The first version did not have information
-# such as migration, fertility and complete employment. In 2015 the census
-# dataset was revised to include all the missing information. The process of
-# revision also ensured that the entire dataset is consistent with the
-# questionnaire and metadata. Income variable was one of the variables affected
-# and the individual income categories were corrected to match metadata,
-# however, that did not change the totals. All the products from 2015 dataset,
-# i.e., Census 2011 10% sample and Census 2011(Boundaries 2016) are based on the
-# revised version. The above mentioned products are final and they are in line
-# with metadata. In addition we have kept all the income categories as annual
-# and the corresponding monthly income can be obtained in a questionnaire and
-# metadata.
-
-COLLAPSED_MONTHLY_INCOME_CATEGORIES = OrderedDict()
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["No income"] = "R0"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 1 - R 400"] = "Under R400"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 401 - R 800"] = "R400 - R800"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 801 - R 1 600"] = "R800 - R2k"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 1 601 - R 3 200"] = "R2k - R3k"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 3 201 - R 6 400"] = "R3k - R6k"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 6 401 - R 12 800"] = "R6k - R13k"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 12 801 - R 25 600"] = "R13k - R26k"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 25 601 - R 51 200"] = "R26k - R51k"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 51 201 - R 102 400"] = "R51k - R102k"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 102 401 - R 204 800"] = "Over R102k"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["R 204 801 or more"] = "Over R102k"
-COLLAPSED_MONTHLY_INCOME_CATEGORIES["Unspecified"] = "Unspecified"
-
-ESTIMATED_MONTHLY_INCOME_CATEGORIES = {}
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["R0"] = 0
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["Under R400"] = 200
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["R400 - R800"] = 600
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["R800 - R2k"] = 1200
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["R2k - R3k"] = 2400
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["R3k - R6k"] = 4800
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["R6k - R13k"] = 9600
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["R13k - R26k"] = 19200
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["R26k - R51k"] = 38400
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["R51k - R102k"] = 76800
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["Over R102k"] = 204800
-ESTIMATED_MONTHLY_INCOME_CATEGORIES["Unspecified"] = None
-
-ESTIMATED_ANNUAL_INCOME_CATEGORIES = {}
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R0"] = 0
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["Under R4800"] = 2400
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R5k - R10k"] = 7500
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R10k - R20k"] = 15000
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R20k - R40k"] = 30000
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R40k - R75k"] = 57500
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R75k - R150k"] = 117000
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R150k - R300k"] = 225000
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R300k - R600k"] = 450000
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R600k - R1.2M"] = 900000
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["R1.2M - R2.5M"] = 1350000
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["Over R2.5M"] = 2457600
-ESTIMATED_ANNUAL_INCOME_CATEGORIES["Unspecified"] = None
-
-# Household income
-HOUSEHOLD_INCOME_RECODE_2011 = OrderedDict()
-HOUSEHOLD_INCOME_RECODE_2011["No income"] = "R0"
-HOUSEHOLD_INCOME_RECODE_2011["R 1 - R 4800"] = "Under R4800"
-HOUSEHOLD_INCOME_RECODE_2011["R 4801 - R 9600"] = "R5k - R10k"
-HOUSEHOLD_INCOME_RECODE_2011["R 9601 - R 19 600"] = "R10k - R20k"
-HOUSEHOLD_INCOME_RECODE_2011["R 19 601 - R 38 200"] = "R20k - R40k"
-HOUSEHOLD_INCOME_RECODE_2011["R 38 201 - R 76 400"] = "R40k - R75k"
-HOUSEHOLD_INCOME_RECODE_2011["R 76 401 - R 153 800"] = "R75k - R150k"
-HOUSEHOLD_INCOME_RECODE_2011["R 153 801 - R 307 600"] = "R150k - R300k"
-HOUSEHOLD_INCOME_RECODE_2011["R 307 601 - R 614 400"] = "R300k - R600k"
-HOUSEHOLD_INCOME_RECODE_2011["R 614 001 - R 1 228 800"] = "R600k - R1.2M"
-HOUSEHOLD_INCOME_RECODE_2011["R 1 228 801 - R 2 457 600"] = "R1.2M - R2.5M"
-HOUSEHOLD_INCOME_RECODE_2011["R 2 457 601 or more"] = "Over R2.5M"
-
-COLLAPSED_ANNUAL_INCOME_CATEGORIES = OrderedDict()
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["No income"] = "R0"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 1 - R 4800"] = "Under R4800"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 4801 - R 9600"] = "R5k - R10k"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 9601 - R 19200"] = "R10k - R20k"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 19201 - R 38400"] = "R20k - R40k"
-# Note double space is intentional to match SuperWeb export.
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 38401 -  R 76800"] = "R40k - R75k"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 38401 - R 76800"] = "R40k - R75k"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 76801 - R 153600"] = "R75k - R150k"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 153601 - R 307200"] = "R150k - R300k"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 307201 - R 614400"] = "R300k - R600k"
-# Note missing space is intentional to match SuperWeb export.
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 614401- R 1228800"] = "R600k - R1.2M"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R 1228801 - R 2457600"] = "R1.2M - R2.5M"
-COLLAPSED_ANNUAL_INCOME_CATEGORIES["R2457601 or more"] = "Over R2.5M"
-
-HOUSEHOLD_INCOME_ESTIMATE = {}
-HOUSEHOLD_INCOME_ESTIMATE["R0"] = 0
-HOUSEHOLD_INCOME_ESTIMATE["Under R4800"] = 2400
-HOUSEHOLD_INCOME_ESTIMATE["R5k - R10k"] = 7200
-HOUSEHOLD_INCOME_ESTIMATE["R10k - R20k"] = 14600
-HOUSEHOLD_INCOME_ESTIMATE["R20k - R40k"] = 29400
-HOUSEHOLD_INCOME_ESTIMATE["R40k - R75k"] = 57300
-HOUSEHOLD_INCOME_ESTIMATE["R75k - R150k"] = 115100
-HOUSEHOLD_INCOME_ESTIMATE["R150k - R300k"] = 230700
-HOUSEHOLD_INCOME_ESTIMATE["R300k - R600k"] = 461000
-HOUSEHOLD_INCOME_ESTIMATE["R600k - R1.2M"] = 921400
-HOUSEHOLD_INCOME_ESTIMATE["R1.2M - R2.5M"] = 1843200
-HOUSEHOLD_INCOME_ESTIMATE["Over R2.5M"] = 2500000
-HOUSEHOLD_INCOME_ESTIMATE["Unspecified"] = None
-
-HOUSEHOLD_OWNERSHIP_RECODE = {
-    "Unspecified": "Other",
-    "Not applicable": "Other",
-    "Do not know": "Other",
-}
-
-# Sanitation categories
-
-SHORT_WATER_SOURCE_CATEGORIES = {
-    "Regional/local water scheme (operated by municipality or other water services provider)": "Service provider",
-    "Water tanker": "Tanker",
-    "Spring": "Spring",
-    "Other": "Other",
-    "Dam/pool/stagnant water": "Dam",
-    "River/stream": "River",
-    "Not applicable": "N/A",
-    "Borehole": "Borehole",
-    "Rain water tank": "Rainwater tank",
-    "Water vendor": "Vendor",
-    # CS 2016:
-    "Borehole in the yard": "Borehole in yard",
-    "Borehole outside the yard": "Borehole outside yard",
-    "Neighbours tap": "Neighbours tap",
-    "Flowing water/stream/river": "River",
-    "Piped (tap) water inside the dwelling/house": "Piped water inside house",
-    "Piped (tap) water inside yard": "Piped water inside yard",
-    "Piped water on community stand": "Piped water on community stand",
-    "Public/communal tap": "Public/communal tap",
-    "Rain-water tank in yard": "Rainwater tank",
-    "Water-carrier/tanker": "Tanker",
-    "Well": "Well",
-}
-
-SHORT_WATER_SUPPLIER_CATEGORIES = {
-    "A municipality": "Service provider",
-    "Other water scheme (e.g. community water supply)": "Water scheme",
-    "A water vendor": "Vendor",
-    "Own service (e.g. private borehole; own source on a farm; et": "Own service",
-    "Flowing water/stream/river/spring/rain water": "Natural source",
-    "Do not know": "Do not know",
-    "Unspecified": "Unspecified",
-}
-
-SHORT_REFUSE_DISPOSAL_CATEGORIES = {
-    "Removed by local authority/private company less often": "Service provider (not regularly)",
-    "Own refuse dump": "Own dump",
-    "Communal refuse dump": "Communal dump",
-    "Other": "Other",
-    "Not applicable": "N/A",
-    "No rubbish disposal": "None",
-    "Unspecified": "Unspecified",
-    "Removed by local authority/private company at least once a week": "Service provider (regularly)",
-    # CS 2016:
-    "Removed by local authority/private company/community members at least once a week": "Service provider (regularly)",
-    "Removed by local authority/private company/community members less often than once a week": "Service provider (not regularly)",
-    "Communal container/central collection point": "Communal container",
-    "Dump or leave rubbish anywhere (no rubbish disposal)": " None",
-}
-
-COLLAPSED_TOILET_CATEGORIES = {
-    "Flush toilet (connected to sewerage system)": "Flush toilet",
-    "Flush toilet (with septic tank)": "Flush toilet",
-    "Chemical toilet": "Chemical toilet",
-    "Pit toilet with ventilation (VIP)": "Pit toilet",
-    "Pit toilet without ventilation": "Pit toilet",
-    "Bucket toilet": "Bucket toilet",
-    "Other": "Other",
-    "None": "None",
-    "Unspecified": "Unspecified",
-    "Not applicable": "N/A",
-    # CS 2016:
-    "Flush toilet connected to a public sewerage system": "Flush toilet",
-    "Flush toilet connected to a septic tank or conservancy tank": "Flush toilet",
-    "Chemical toilet": "Chemical toilet",
-    "Pit latrine/toilet with ventilation pipe": "Pit toilet",
-    "Pit latrine/toilet without ventilation pipe": "Pit toilet",
-    "Ecological toilet (e.g. urine diversion; enviroloo; etc.)": "Ecological toilet",
-    "Bucket toilet (collected by municipality)": "Bucket toilet",
-    "Bucket toilet (emptied by household)": "Bucket toilet",
-}
-
-HOUSEHOLD_GOODS_RECODE = {
-    "cell phone": "Cellphone",
-    "computer": "Computer",
-    "dvd player": "DVD player",
-    "electric/gas stove": "Stove",
-    "landline/telephone": "Telephone",
-    "motor-car": "Car",
-    "radio": "Radio",
-    "refrigerator": "Fridge",
-    "satellite television": "Satellite TV",
-    "television": "TV",
-    "vacuum cleaner": "Vacuum cleaner",
-    "washing machine": "Washing machine",
-}
-
-# Type of dwelling
-
-TYPE_OF_DWELLING_RECODE = {
-    "House or brick/concrete block structure on a separate stand or yard or on a farm": "House",
-    "Traditional dwelling/hut/structure made of traditional materials": "Traditional",
-    "Flat or apartment in a block of flats": "Apartment",
-    "Cluster house in complex": "Cluster house",
-    "Townhouse (semi-detached house in a complex)": "Townhouse",
-    "Semi-detached house": "Semi-detached house",
-    "House/flat/room in backyard": "Flat in backyard",
-    "Informal dwelling (shack; in backyard)": "Shack",
-    "Informal dwelling (shack; not in backyard; e.g. in an informal/squatter settlement or on a farm)": "Shack",
-    "Room/flatlet on a property or larger dwelling/servants quarters/granny flat": "Room or flatlet",
-    "Caravan/tent": "Caravan/tent",
-    "Other": "Other",
-    "Unspecified": "Unspecified",
-    "Not applicable": "N/A",
-    # Cs 2016:
-    "Formal dwelling/house/flat/room in backyard": "Flat in backyard",
-    "Informal dwelling/shack in backyard": "Shack",
-    "Traditional dwelling/hut/structure made of traditional mater": "Traditional",
-    "Room/flatlet on a property or larger dwelling/servants quart": "Room or flatlet",
-    "Formal dwelling/house or brick/concrete block structure on a": "House",
-    "Informal dwelling/shack not in backyard (e.g. in an informal": "Shack",
-}
-
-COLLAPSED_EMPLOYMENT_CATEGORIES = {
-    "Employed": "In labour force",
-    "Unemployed": "In labour force",
-    "Discouraged work-seeker": "In labour force",
-    "Other not economically active": "Not in labour force",
-    "Age less than 15 years": "Not in labour force",
-    "Not applicable": "Not in labour force",
-}
-
-INTERNET_ACCESS_RECODE = {
-    "Connection from a library": "Library",
-    "Connection in the dwelling": "In dwelling",
-    "Other": "Other",
-    "Any place via other mobile access service": "Other mobile service",
-    "Any place via cellphone": "Cellphone",
-    "Internet cafe > 2km from dwelling": "Internet cafe > 2km from dwelling",
-    "Internet cafe 2km or less from dwelling": "Internet cafe < 2km from dwelling",
-    "Connection at place of work": "Place of work",
-    "At school/university/college": "Place of education",
-}
-
-ELECTRICITY_ACCESS_RECODE = {
-    "Connected to other source which household is not paying for": "Other source (paying for)",
-    "Connected to other source which household pays for (e.g. con": "Other source (not paying for)",
-}
+PROFILE_SECTIONS = ("indicator",)
 
 
 def get_profile(geo, profile_name, request):
@@ -492,8 +35,6 @@ def get_profile(geo, profile_name, request):
         data["primary_release_year"] = current_context().get("year")
 
         sections = list(PROFILE_SECTIONS)
-        if geo.geo_level in ["country", "province"]:
-            sections.append("crime")
 
         for section in sections:
             function_name = "get_%s_profile" % section
@@ -517,25 +58,16 @@ def get_profile(geo, profile_name, request):
     finally:
         session.close()
 
-    # tweaks to make the data nicer
-    # show 3 largest groups on their own and group the rest as 'Other'
-    group_remainder(data["service_delivery"]["water_source_distribution"], 5)
-    group_remainder(data["service_delivery"]["refuse_disposal_distribution"], 5)
-    group_remainder(data["service_delivery"]["toilet_facilities_distribution"], 5)
-    group_remainder(data["demographics"]["language_distribution"], 7)
-    group_remainder(data["demographics"]["province_of_birth_distribution"], 7)
-    group_remainder(data["demographics"]["region_of_birth_distribution"], 5)
-    group_remainder(data["households"]["type_of_dwelling_distribution"], 5)
-    group_remainder(data["households"]["tenure_distribution"], 6)
-    group_remainder(data["child_households"]["type_of_dwelling_distribution"], 5)
+    import json
 
-    if current_context().get("year") == "latest":
-        group_remainder(data["service_delivery"]["water_supplier_distribution"], 5)
-        group_remainder(data["service_delivery"]["electricity_access"], 5)
-
-    data["elections"] = get_elections_profile(geo)
+    with open("example.json", "w") as f:
+        json.dump(data, f)
 
     return data
+
+
+def get_indicator_profile(geo, session):
+    return get_dynamic_profiles(geo, session)
 
 
 def get_demographics_profile(geo, session):
@@ -600,7 +132,6 @@ def get_demographics_profile(geo, session):
 
     # median age/age category
     age_table = get_datatable("ageincompletedyears")
-
     objects = sorted(
         age_table.get_rows_for_geo(geo, session),
         key=lambda x: int(getattr(x, "age in completed years")),
