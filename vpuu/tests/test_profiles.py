@@ -81,9 +81,9 @@ class ProfileTests(TestCase):
         )
         population_field_table_2016.save()
 
-        # Create a profile for the population indicator
+        # Create a profile for the population group indicator
         profile = Profile.objects.create(name="Demographics")
-        IndicatorProfile(
+        IndicatorProfile.objects.create(
             profile=profile,
             table_name=population_field_table,
             column_name="population group",
@@ -144,18 +144,14 @@ class ProfileTests(TestCase):
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Discover the story behind the data")
 
-    # def test_geo_country(self):
-    #     resp = self.client.get("/profiles/country-ZA-south-africa/?release=2011")
-    #     print(resp.context["indicator"])
-    #     self.assertEqual(resp.status_code, 200)
-    #     self.assertContains(resp, "South Africa")
-    #     # self.assertContains(resp, "Population group")  # Chart title
-    #     self.assertContains(resp, "51 770 560 people")  # Total population
+    def test_geo_country(self):
+        resp = self.client.get("/profiles/country-ZA-south-africa/?release=2011")
+        self.assertEqual(resp.status_code, 200)
+        self.assertContains(resp, "South Africa")
+        self.assertContains(resp, "51770560")  # Total population
 
     def test_geo_country_2016(self):
         resp = self.client.get("/profiles/country-ZA-south-africa/")
         self.assertEqual(resp.status_code, 200)
-        print(resp.context["indicator"])
         self.assertContains(resp, "South Africa")
-        self.assertContains(resp, "55 653 654 people")  # Total population
-        self.assertContains(resp, "Population group")  # Chart title
+        self.assertContains(resp, "55653654")  # Total population
