@@ -11,8 +11,17 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("VPUU_DEBUG", "true") == "true"
 
-INSTALLED_APPS = ["vpuu"] + INSTALLED_APPS
+INSTALLED_APPS = ["vpuu", "dynamic_profile"] + INSTALLED_APPS
 
+
+MIDDLEWARE = [
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    # "wazimap.middleware.RedirectMiddleware",
+]
 
 STRIP_WWW = True
 ROOT_URLCONF = "vpuu.urls"
@@ -24,6 +33,7 @@ DATABASE_URL = os.environ.get(
 
 DATABASES["default"] = dj_database_url.parse(DATABASE_URL)
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES["default"]["TEST"] = {"NAME": "test_wazimap_vpuu"}
 
 
 WAZIMAP["name"] = "Violence Prevention through Urban Upgrading"
