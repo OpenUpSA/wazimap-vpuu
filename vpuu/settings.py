@@ -36,7 +36,7 @@ DATABASES["default"]["ATOMIC_REQUESTS"] = True
 DATABASES["default"]["TEST"] = {"NAME": "test_wazimap_vpuu"}
 
 
-WAZIMAP["name"] = "Violence Prevention through Urban Upgrading"
+WAZIMAP["name"] = "Community Atlas"
 WAZIMAP["url"] = "https://vpuu.openup.org.za"
 
 WAZIMAP["country_code"] = "ZA"
@@ -64,7 +64,8 @@ WAZIMAP["available_release_years"] = {
     # Release years with data for geo_levels.
     # Only specify geo_levels with limited releases.
     # Other geo_levels have data for all releases.
-    "ward": [2011]
+    "ward": [2011],
+    "subplace": [2011],
 }
 
 WAZIMAP["levels"] = {
@@ -72,9 +73,10 @@ WAZIMAP["levels"] = {
         "plural": "countries",
         "children": ["province", "district", "municipality"],
     },
-    "province": {"children": ["district", "municipality", "ward"]},
-    "district": {"children": ["municipality", "ward"]},
-    "municipality": {"plural": "municipalities", "children": ["ward"]},
+    "province": {"children": ["district", "municipality", "subplace", "ward"]},
+    "district": {"children": ["municipality", "subplace", "ward"]},
+    "municipality": {"plural": "municipalities", "children": ["subplace"]},
+    "subplace": {"children": []},
     "ward": {"children": []},
 }
 
