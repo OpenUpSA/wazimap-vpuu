@@ -21,36 +21,40 @@ class ProfileTests(TestCase):
             geo_level="country", geo_code="ZA", version="2016", name="South Africa"
         )
         Geography.objects.create(
-            geo_level="province", geo_code="WC", version="2016", 
-            name="Western Cape"
+            geo_level="province", geo_code="WC", version="2016", name="Western Cape"
         )
         Geography.objects.create(
-            geo_level="province", geo_code="WC", version="2011", 
-            name="Western Cape"
+            geo_level="province", geo_code="WC", version="2011", name="Western Cape"
         )
         Geography.objects.create(
-            geo_level="district", geo_code="DC3", version="2016", 
-            name="Overberg"
+            geo_level="district", geo_code="DC3", version="2016", name="Overberg"
         )
         Geography.objects.create(
-            geo_level="district", geo_code="DC3", version="2011", 
-            name="Overberg"
+            geo_level="district", geo_code="DC3", version="2011", name="Overberg"
         )
         Geography.objects.create(
-            geo_level="municipality", geo_code="CPT", version="2016", 
-            name="City of Cape Town"
+            geo_level="municipality",
+            geo_code="CPT",
+            version="2016",
+            name="City of Cape Town",
         )
         Geography.objects.create(
-            geo_level="municipality", geo_code="CPT", version="2011", 
-            name="City of Cape Town"
+            geo_level="municipality",
+            geo_code="CPT",
+            version="2011",
+            name="City of Cape Town",
         )
         Geography.objects.create(
-            geo_level="ward", geo_code="19100070", version="2016", 
-            name="City of Cape Town Ward 70 (19100070)"
+            geo_level="ward",
+            geo_code="19100070",
+            version="2016",
+            name="City of Cape Town Ward 70 (19100070)",
         )
         Geography.objects.create(
-            geo_level="ward", geo_code="19100070", version="2011", 
-            name="City of Cape Town Ward 70 (19100070)"
+            geo_level="ward",
+            geo_code="19100070",
+            version="2011",
+            name="City of Cape Town Ward 70 (19100070)",
         )
 
         dataset = Dataset.objects.create(name="Census and Community Survey")
@@ -130,7 +134,7 @@ class ProfileTests(TestCase):
         # django does not know about the table so have to use this
 
         connection = psycopg2.connect(
-            "postgresql://wazimap_vpuu:wazimap_vpuu@localhost:5432/test_wazimap_vpuu"
+            "postgresql://postgres:postgres@db/test_wazimap_vpuu"
         )
         cursor = connection.cursor()
         pop_csv = os.getcwd() + "/vpuu/tests/populationgroup.csv"
@@ -170,7 +174,6 @@ class ProfileTests(TestCase):
                 )
             connection.commit()
         connection.close()
-    
 
     def test_home_page(self):
         resp = self.client.get("/")
@@ -220,19 +223,25 @@ class ProfileTests(TestCase):
         self.assertContains(resp, "4005015")  # Total population
 
     def test_geo_municipality_2011(self):
-        resp = self.client.get("/profiles/municipality-CPT-city-of-cape-town/?release=2011")
+        resp = self.client.get(
+            "/profiles/municipality-CPT-city-of-cape-town/?release=2011"
+        )
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "City of Cape Town")
         self.assertContains(resp, "3740026")  # Total population
 
     def test_geo_ward_2016(self):
-        resp = self.client.get("/profiles/ward-19100070-city-of-cape-town-ward-70-19100070/")
+        resp = self.client.get(
+            "/profiles/ward-19100070-city-of-cape-town-ward-70-19100070/"
+        )
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "City of Cape Town Ward 70 (19100070)")
         self.assertContains(resp, "25113")  # Total population
 
     def test_geo_ward_2011(self):
-        resp = self.client.get("/profiles/ward-19100070-city-of-cape-town-ward-70-19100070/?release=2011")
+        resp = self.client.get(
+            "/profiles/ward-19100070-city-of-cape-town-ward-70-19100070/?release=2011"
+        )
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "City of Cape Town Ward 70 (19100070)")
         self.assertContains(resp, "24934")  # Total population
