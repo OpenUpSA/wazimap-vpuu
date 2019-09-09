@@ -3,3 +3,19 @@ country,ZA,2016,Black African,44891603
 country,ZA,2016,Coloured,4869526
 country,ZA,2016,Indian or Asian,1375834
 country,ZA,2016,White,4516691
+provincial,WC,Black African,100,2016
+provincial,WC,Coloured,1234,2016
+provincial,WC,Indian or Asian,4005,2016
+provincial,WC,White,2052,2016
+district,DC3,Black African,100,2016
+district,DC3,Coloured,1234,2016
+district,DC3,Indian or Asian,4005,2016
+district,DC3,White,2052,2016
+municipality,CPT,Black African,100,2016
+municipality,CPT,Coloured,1234,2016
+municipality,CPT,Indian or Asian,4005,2016
+municipality,CPT,White,2052,2016
+ward,19100070,Black African,100,2016
+ward,19100070,Coloured,1234,2016
+ward,19100070,Indian or Asian,4005,2016
+ward,19100070,White,2052,2016
