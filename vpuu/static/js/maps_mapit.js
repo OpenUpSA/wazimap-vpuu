@@ -92,10 +92,21 @@ function MapItGeometryLoader() {
         });
     };
 
-    this.loadControlLayers = function(geo_level, geo_code, geo_version,map){
-	var subplace_layer = new L.geoJson().addTo(map);
-	var ward_layer = new L.geoJson().addTo(map);
+    this.wardLayers = function(geo_code,geo_level, geo_version, overlayMap,success){
+	var mapit_type = MAPIT.level_codes[geo_level];
+        var mapit_simplify = MAPIT.level_simplify[mapit_type];
+        var generation = MAPIT.generations[geo_version];
+	
+	var ward_url = '/areas/MDB-levels:' +mapit_type +'-' + geo_code +'|WD' +
+	    '.geojson?generation='+ generation +"&simplify_tolerance=" + mapit_simplify;
 
+	d3.json(this.mapit_url + ward_url, function(geojson){
+	    var features = _.values(geojson.features);
+            _.each(features, self.decorateFeature);
+	    success(geojson, overlayMap);
+	});
+    };
+    this.subPlaceLayers = function(geo_code,geo_level,geo_version,overlayMap,success){
 	var mapit_type = MAPIT.level_codes[geo_level];
         var mapit_simplify = MAPIT.level_simplify[mapit_type];
         var generation = MAPIT.generations[geo_version];
@@ -106,30 +117,14 @@ function MapItGeometryLoader() {
 	var subplace_url = '/areas/MDB-levels:' +mapit_type +'-' + geo_code +'|SP' +
 	    '.geojson?generation='+ generation +"&simplify_tolerance=" + mapit_simplify;
 
-	console.log(subplace_url);
-	console.log(ward_url);
-
-	var overlayMap = {};
-
-	d3.json(this.mapit_url + ward_url, function(geojson){
-	    var ward_layer = L.geoJson(
-		geojson,{
-		    'style': this.decorateFeature
-		}
-	    ).addTo(map);
-	    overlayMap["<span style='color:#267fca'>SubPlace</span>"] = ward_layer;
-	});
 	d3.json(this.mapit_url + subplace_url, function(geojson){
-	    var subplace_layer = L.geoJson(
-		geojson, {
-		    'style': this.decorateFeature
-		}
-	    ).addTo(map);
-	    overlayMap["<span style='color:#24ac20'>Ward</span>"] = subplace_layer;
+	    var features = _.values(geojson.features);
+            _.each(features, self.decorateFeature);
+	    success(geojson);
 	});
-	
-	L.control.layers(null,overlayMap, {collapsed:false}).addTo(map);
     };
+
+
 
     this.loadGeometryForGeo = function(geo_level, geo_code, geo_version, success) {
         var mapit_type = MAPIT.level_codes[geo_level];
