@@ -37,7 +37,23 @@ ProfileMaps = function() {
 
         // children
         if (geo.this.child_level) {
-          self.drawSurroundingFeatures(geo.this.child_level, geo_level, geo_code, geo_version);
+	    if (geo_level == 'municipality'){
+		var overlayMap = {};
+		GeometryLoader.subPlaceLayers(geo_code, geo_level, geo_version,overlayMap, function(subplace_geojson, ward_geojson){
+		    var subplace_layer = self.drawFeatures(subplace_geojson);
+		    var ward_layer = self.drawFeatures(ward_geojson);
+		    
+		    var overlayMap = {
+			'Subplace': subplace_layer,
+			'Ward': ward_layer
+		    };
+		    L.control.layers(null,overlayMap, {collapsed:false}).addTo(self.map);
+		});
+		
+	    }else{
+		self.drawSurroundingFeatures(geo.this.child_level, geo_level, geo_code, geo_version);
+	    }
+          
         }
     };
 
@@ -71,7 +87,6 @@ ProfileMaps = function() {
 
         // if we're loading districts, we also want to load metros, because
         // districts don't give us full coverage
-	// We also need to load the point that
         if (level == 'district') {
             GeometryLoader.loadGeometrySet(parent + '|' + MAPIT.level_codes.municipality, 'municipality', parent_version, function(geojson) {
                 // only keep metros
