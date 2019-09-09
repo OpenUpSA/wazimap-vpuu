@@ -10,7 +10,7 @@ django-pipeline==1.6.14
 django-sass-processor==0.7.2
 django-test-without-migrations==0.4
 djangorestframework==3.9.2
-GDAL==2.2.3
+GDAL==1.10
 geojson==2.4.1
 gevent==1.4.0
 greenlet==0.4.15
