@@ -11,27 +11,27 @@ log = logging.getLogger(__name__)
 SETTINGS = settings.WAZIMAP.setdefault('mapit', {})
 SETTINGS.setdefault('url', 'https://mapit.openup.org.za')
 SETTINGS.setdefault(
-    'generations',
+    "generations",
     {
-        '2011': '1',
-        '2016': '2',
-        None:
-        '1',  # TODO: this should be based on the default_geo_version wazimap setting
-    })
+        "2011": "1",
+        "2016": "2",
+        None: "1",  # TODO: this should be based on the default_geo_version wazimap setting
+    },
+)
 SETTINGS.setdefault(
-    'level_codes', {
-        'ward': 'WD',
-        'municipality': 'MN',
-        'district': 'DC',
-        'province': 'PR',
-        'country': 'CY',
-    })
-SETTINGS.setdefault('level_simplify', {
-    'DC': 0.01,
-    'PR': 0.005,
-    'MN': 0.005,
-    'WD': 0.0001,
-})
+    "level_codes",
+    {
+        "subplace": "SP",
+        "ward": "WD",
+        "municipality": "MN",
+        "district": "DC",
+        "province": "PR",
+        "country": "CY",
+    },
+)
+SETTINGS.setdefault(
+    "level_simplify", {"DC": 0.01, "PR": 0.005, "MN": 0.005, "WD": 0.0001, "SP": 0.005}
+)
 
 
 class GeoData(BaseGeoData):
@@ -41,13 +41,15 @@ class GeoData(BaseGeoData):
         and 'shape' which is a shapely shape (may be None).
         """
 
-        mapit_level = SETTINGS['level_codes'][geo.geo_level]
-        url = SETTINGS['url'] + '/area/MDB:%s/feature.geojson?type=%s' % (
-            geo.geo_code, mapit_level)
-        url = url + '&generation=%s' % SETTINGS['generations'][geo.version]
-        simplify = SETTINGS['level_simplify'].get(mapit_level)
+        mapit_level = SETTINGS["level_codes"][geo.geo_level]
+        url = SETTINGS["url"] + "/area/MDB:%s/feature.geojson?type=%s" % (
+            geo.geo_code,
+            mapit_level,
+        )
+        url = url + "&generation=%s" % SETTINGS["generations"][geo.version]
+        simplify = SETTINGS["level_simplify"].get(mapit_level)
         if simplify:
-            url = url + '&simplification_level=%s' % simplify
+            url = url + "&simplification_level=%s" % simplify
 
         resp = requests.get(url, verify=False)
         if resp.status_code == 404:
@@ -55,40 +57,36 @@ class GeoData(BaseGeoData):
         resp.raise_for_status()
 
         feature = resp.json()
-        shape = asShape(feature['geometry'])
+        shape = asShape(feature["geometry"])
 
-        return {
-            'properties': feature['properties'],
-            'shape': shape,
-        }
+        return {"properties": feature["properties"], "shape": shape}
 
-    def get_locations_from_coords(self,
-                                  longitude,
-                                  latitude,
-                                  levels=None,
-                                  version=None):
+    def get_locations_from_coords(self, longitude, latitude, levels=None, version=None):
         """
         Returns a list of geographies containing this point.
         """
         resp = requests.get(
-            SETTINGS['url'] + '/point/4326/%s,%s?generation=%s' %
-            (longitude, latitude, SETTINGS['generations'][version]),
-            verify=False)
+            SETTINGS["url"]
+            + "/point/4326/%s,%s?generation=%s"
+            % (longitude, latitude, SETTINGS["generations"][version]),
+            verify=False,
+        )
         resp.raise_for_status()
 
         geos = []
         for feature in resp.json().itervalues():
             try:
                 geo = self.get_geography(
-                    feature['codes']['MDB'],
-                    feature['type_name'].lower(),
-                    version=version)
+                    feature["codes"]["MDB"],
+                    feature["type_name"].lower(),
+                    version=version,
+                )
 
                 if not levels or geo.geo_level in levels:
                     geos.append(geo)
             except LocationNotFound as e:
                 log.warn(
-                    "Couldn't find geo that Mapit gave us: %s" % feature,
-                    exc_info=e)
+                    "Couldn't find geo that Mapit gave us: %s" % feature, exc_info=e
+                )
 
         return geos
