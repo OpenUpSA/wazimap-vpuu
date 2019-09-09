@@ -10,3 +10,19 @@ country,ZA,Indian or Asian,1286930,2016
 country,ZA,White,4586838,2016
 country,ZA,Other,280454,2016
 country,ZA,Unspecified,0,2016
+provincial,WC,Black African,100,2011
+provincial,WC,Coloured,100,2011
+provincial,WC,Indian or Asian,100,2011
+provincial,WC,White,100,2011
+district,DC3,Black African,100,2011
+district,DC3,Coloured,100,2011
+district,DC3,Indian or Asian,100,2011
+district,DC3,White,100,2011
+municipality,CPT,Black African,100,2011
+municipality,CPT,Coloured,1234,2011
+municipality,CPT,Indian or Asian,4005,2011
+municipality,CPT,White,2052,2011
+ward,19100070,Black African,100,2011
+ward,19100070,Coloured,1234,2011
+ward,19100070,Indian or Asian,4005,2011
+ward,19100070,White,2052,2011
