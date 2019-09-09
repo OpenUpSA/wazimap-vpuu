@@ -10,19 +10,30 @@ country,ZA,Indian or Asian,1286930,2016
 country,ZA,White,4586838,2016
 country,ZA,Other,280454,2016
 country,ZA,Unspecified,0,2016
-provincial,WC,Black African,100,2011
-provincial,WC,Coloured,100,2011
-provincial,WC,Indian or Asian,100,2011
-provincial,WC,White,100,2011
-district,DC3,Black African,100,2011
-district,DC3,Coloured,100,2011
-district,DC3,Indian or Asian,100,2011
-district,DC3,White,100,2011
-municipality,CPT,Black African,100,2011
-municipality,CPT,Coloured,1234,2011
-municipality,CPT,Indian or Asian,4005,2011
-municipality,CPT,White,2052,2011
-ward,19100070,Black African,100,2011
-ward,19100070,Coloured,1234,2011
-ward,19100070,Indian or Asian,4005,2011
-ward,19100070,White,2052,2011
+provincial,WC,Black African,1912547,2011
+provincial,WC,Coloured,2840404,2011
+provincial,WC,Indian or Asian,60761,2011
+provincial,WC,White,915053,2011
+provincial,WC,Other,93969,2011
+provincial,WC,Unspecified,0,2011
+district,DC3,Black African,66151,2011
+district,DC3,Coloured,139825,2011
+district,DC3,Indian or Asian,816,2011
+district,DC3,White,48692,2011
+district,DC3,Other,2692,2011
+municipality,CPT,Black African,1444939,2011
+municipality,CPT,Coloured,1585286,2011
+municipality,CPT,Indian or Asian,51786,2011
+municipality,CPT,White,585831,2011
+municipality,CPT,Other,72184,2011
+ward,19100070,Black African,1735,2016
+ward,19100070,Coloured,2358,2016
+ward,19100070,Indian or Asian,566,2016
+ward,19100070,White,20011,2016
+ward,19100070,Other,443,2016
+ward,19100070,Unspecified,0,2016
+ward,19100070,Black African,1723,2011
+ward,19100070,Coloured,2322,2011
+ward,19100070,Indian or Asian,553,2011
+ward,19100070,White,19893,2011
+ward,19100070,Other,443,2011

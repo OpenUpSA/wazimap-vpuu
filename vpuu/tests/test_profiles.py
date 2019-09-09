@@ -193,46 +193,46 @@ class ProfileTests(TestCase):
         resp = self.client.get("/profiles/province-WC-western-cape/?release=2011")
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Western Cape")
-        self.assertContains(resp, "400")  # Total population
+        self.assertContains(resp, "5822734")  # Total population
 
     def test_geo_provincial_2016(self):
         resp = self.client.get("/profiles/province-WC-western-cape/")
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Western Cape")
-        self.assertContains(resp, "7391")  # Total population
+        self.assertContains(resp, "6279731")  # Total population
 
     def test_geo_district_2016(self):
         resp = self.client.get("/profiles/district-DC3-overberg/")
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Overberg")
-        self.assertContains(resp, "7391")  # Total population
+        self.assertContains(resp, "286786")  # Total population
 
     def test_geo_district_2011(self):
         resp = self.client.get("/profiles/district-DC3-overberg/?release=2011")
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "Overberg")
-        self.assertContains(resp, "400")  # Total population
+        self.assertContains(resp, "258176")  # Total population
 
     def test_geo_municipality_2016(self):
         resp = self.client.get("/profiles/municipality-CPT-city-of-cape-town/")
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "City of Cape Town")
-        self.assertContains(resp, "7391")  # Total population
+        self.assertContains(resp, "4005015")  # Total population
 
     def test_geo_municipality_2011(self):
         resp = self.client.get("/profiles/municipality-CPT-city-of-cape-town/?release=2011")
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "City of Cape Town")
-        self.assertContains(resp, "7391")  # Total population
+        self.assertContains(resp, "3740026")  # Total population
 
     def test_geo_ward_2016(self):
         resp = self.client.get("/profiles/ward-19100070-city-of-cape-town-ward-70-19100070/")
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "City of Cape Town Ward 70 (19100070)")
-        self.assertContains(resp, "7391")  # Total population
+        self.assertContains(resp, "25113")  # Total population
 
-    def test_geo_municipality_2011(self):
+    def test_geo_ward_2011(self):
         resp = self.client.get("/profiles/ward-19100070-city-of-cape-town-ward-70-19100070/?release=2011")
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "City of Cape Town Ward 70 (19100070)")
-        self.assertContains(resp, "7391")  # Total population
+        self.assertContains(resp, "24934")  # Total population
