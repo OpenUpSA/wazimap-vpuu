@@ -38,15 +38,8 @@ ProfileMaps = function() {
         // children
         if (geo.this.child_level) {
 	    if (geo_level == 'municipality'){
-		var overlayMap = {};
-		GeometryLoader.subPlaceLayers(geo_code, geo_level, geo_version,overlayMap, function(subplace_geojson, ward_geojson){
-		    var subplace_layer = self.drawFeatures(subplace_geojson);
-		    var ward_layer = self.drawFeatures(ward_geojson);
-		    
-		    var overlayMap = {
-			'Subplace': subplace_layer,
-			'Ward': ward_layer
-		    };
+		self.drawControl(geo_code,geo_level, geo_version, function(overlayMap){
+		    console.log('Creating the leaflet control');
 		    L.control.layers(null,overlayMap, {collapsed:false}).addTo(self.map);
 		});
 		
@@ -55,6 +48,40 @@ ProfileMaps = function() {
 	    }
           
         }
+    };
+
+    this.drawControl = async function(geo_code, geo_level,geo_version, fn){
+	var overlayMap = {};
+	GeometryLoader.subPlaceLayers(geo_code, geo_level, geo_version,function(geojson){
+	    var layer = self.drawGeoFeatures(geojson);
+	    overlayMap['Subplace'] = layer;
+	    GeometryLoader.wardLayers(geo_code, geo_level, geo_version,function(geojson){
+		var layer = self.drawGeoFeatures(geojson);
+		overlayMap['Ward'] = layer;
+		fn(overlayMap);
+	    });
+	});
+	
+    };
+
+    this.drawGeoFeatures = function(features) {
+        // draw all others
+        return L.geoJson(features, {
+            style: this.layerStyle,
+            onEachFeature: function(feature, layer) {
+                layer.bindLabel(feature.properties.name, {direction: 'auto'});
+
+                layer.on('mouseover', function() {
+                    layer.setStyle(self.hoverStyle);
+                });
+                layer.on('mouseout', function() {
+                    layer.setStyle(self.layerStyle);
+                });
+                layer.on('click', function() {
+                    window.location = '/profiles/' + feature.properties.level + '-' + feature.properties.code + '/';
+                });
+            },
+        });
     };
 
     // Add map shapes for a level, limited to within the parent level (eg.
