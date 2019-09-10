@@ -98,7 +98,7 @@ class ProfileTests(TestCase):
         # django does not know about the table so have to use this
 
         connection = psycopg2.connect(
-            "postgresql://wazimap_vpuu:wazimap_vpuu@development/test_wazimap_vpuu"
+            "postgresql://postgres:postgres@db/test_wazimap_vpuu"
         )
         cursor = connection.cursor()
         pop_csv = os.getcwd() + "/vpuu/tests/populationgroup.csv"
