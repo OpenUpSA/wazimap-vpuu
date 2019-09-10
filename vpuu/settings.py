@@ -11,8 +11,6 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("VPUU_DEBUG", "true") == "true"
 
-ALLOWED_HOSTS = ["*"]
-STRIP_WWW = True
 ROOT_URLCONF = "vpuu.urls"
 WSGI_APPLICATION = "vpuu.wsgi.application"
 
