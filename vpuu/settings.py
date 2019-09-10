@@ -80,6 +80,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # the URL for assets
 STATIC_URL = "/static/"
 
+STATICFILES_DIRS = (os.path.join("staticfiles"),)
+
 
 LANGUAGE_CODE = "en-za"
 
