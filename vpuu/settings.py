@@ -39,7 +39,7 @@ DATABASES["default"]["TEST"] = {"NAME": "test_wazimap_vpuu"}
 
 
 WAZIMAP["name"] = "Community Atlas"
-WAZIMAP["url"] = "https://vpuu.openup.org.za"
+WAZIMAP["url"] = "https://communityatlas.openup.org.za"
 WAZIMAP["country_code"] = "ZA"
 WAZIMAP["comparative_levels"] = ["district", "province", "country"]
 WAZIMAP["geodata"] = "vpuu.geo.GeoData"
