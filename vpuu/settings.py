@@ -19,6 +19,7 @@ INSTALLED_APPS = ["vpuu", "dynamic_profile"] + INSTALLED_APPS
 
 
 MIDDLEWARE = [
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -79,9 +80,6 @@ WAZIMAP["mapit"] = {"generations": {"2011": "1", "2016": "2", None: "1"}}
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # the URL for assets
 STATIC_URL = "/static/"
-
-STATICFILES_DIRS = (os.path.join("staticfiles"),)
-
 
 LANGUAGE_CODE = "en-za"
 
