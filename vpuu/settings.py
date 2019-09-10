@@ -78,6 +78,11 @@ WAZIMAP["levels"] = {
 WAZIMAP["mapit"] = {"generations": {"2011": "1", "2016": "2", None: "1"}}
 
 
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# the URL for assets
+STATIC_URL = "/static/"
+
+
 LANGUAGE_CODE = "en-za"
 
 TIME_ZONE = "UTC"
