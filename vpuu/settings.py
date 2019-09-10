@@ -11,6 +11,12 @@ SECRET_KEY = os.environ.get(
 
 DEBUG = os.environ.get("VPUU_DEBUG", "true") == "true"
 
+ALLOWED_HOSTS = ["*"]
+STRIP_WWW = True
+ROOT_URLCONF = "vpuu.urls"
+WSGI_APPLICATION = "vpuu.wsgi.application"
+
+
 INSTALLED_APPS = ["vpuu", "dynamic_profile"] + INSTALLED_APPS
 
 
@@ -20,12 +26,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    # "wazimap.middleware.RedirectMiddleware",
 ]
 
-STRIP_WWW = True
-ROOT_URLCONF = "vpuu.urls"
-WSGI_APPLICATION = "vpuu.wsgi.application"
 
 DATABASE_URL = os.environ.get(
     "DATABASE_URL", "postgresql://wazimap_vpuu:wazimap_vpuu@development/wazimap_vpuu"
@@ -38,19 +40,12 @@ DATABASES["default"]["TEST"] = {"NAME": "test_wazimap_vpuu"}
 
 WAZIMAP["name"] = "Community Atlas"
 WAZIMAP["url"] = "https://vpuu.openup.org.za"
-
 WAZIMAP["country_code"] = "ZA"
 WAZIMAP["comparative_levels"] = ["district", "province", "country"]
-
-# this is provided by mapit
 WAZIMAP["geodata"] = "vpuu.geo.GeoData"
-# WAZIMAP["geometry_data"] = {}
-# google maps api key
 WAZIMAP["google_geocode_api_key"] = os.environ.get("GOOGLE_GEOCODE_API_KEY", "")
-
 WAZIMAP["default_profile"] = "vpuu"
 WAZIMAP["profile_builder"] = "vpuu.profiles.vpuu.get_profile"
-
 WAZIMAP["default_geo_version"] = os.environ.get("DEFAULT_GEO_VERSION", 2016)
 
 WAZIMAP["legacy_embed_geo_version"] = "2011"
@@ -82,18 +77,6 @@ WAZIMAP["levels"] = {
 
 WAZIMAP["mapit"] = {"generations": {"2011": "1", "2016": "2", None: "1"}}
 
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
-]
-
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = "en-za"
 
