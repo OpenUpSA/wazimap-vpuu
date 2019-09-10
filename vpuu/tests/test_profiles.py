@@ -21,16 +21,16 @@ class ProfileTests(TestCase):
             geo_level="country", geo_code="ZA", version="2016", name="South Africa"
         )
         Geography.objects.create(
-            geo_level="province", geo_code="WC", version="2016", name="Western Cape"
-        )
-        Geography.objects.create(
             geo_level="province", geo_code="WC", version="2011", name="Western Cape"
         )
         Geography.objects.create(
-            geo_level="district", geo_code="DC3", version="2016", name="Overberg"
+            geo_level="province", geo_code="WC", version="2016", name="Western Cape"
         )
         Geography.objects.create(
             geo_level="district", geo_code="DC3", version="2011", name="Overberg"
+        )
+        Geography.objects.create(
+            geo_level="district", geo_code="DC3", version="2016", name="Overberg"
         )
         Geography.objects.create(
             geo_level="municipality",
@@ -232,7 +232,7 @@ class ProfileTests(TestCase):
 
     def test_geo_ward_2016(self):
         resp = self.client.get(
-            "/profiles/ward-19100070-city-of-cape-town-ward-70-19100070/"
+            "/profiles/ward-19100070-city-of-cape-town-ward-70-19100070/?release=2016"
         )
         self.assertEqual(resp.status_code, 200)
         self.assertContains(resp, "City of Cape Town Ward 70 (19100070)")
