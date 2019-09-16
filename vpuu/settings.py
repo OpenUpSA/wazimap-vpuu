@@ -15,7 +15,7 @@ ROOT_URLCONF = "vpuu.urls"
 WSGI_APPLICATION = "vpuu.wsgi.application"
 
 
-INSTALLED_APPS = ["vpuu", "dynamic_profile"] + INSTALLED_APPS
+INSTALLED_APPS = ["vpuu", "dynamic_profile", "django.contrib.postgres"] + INSTALLED_APPS
 
 
 MIDDLEWARE = [
@@ -50,7 +50,9 @@ WAZIMAP["default_geo_version"] = os.environ.get("DEFAULT_GEO_VERSION", 2016)
 WAZIMAP["legacy_embed_geo_version"] = "2011"
 WAZIMAP["primary_release_year"] = {
     # use the 2011 release for wards, use the latest (2016) for everything else
-    "ward": 2011
+    "ward": 2011,
+    "subplace": 2011,
+    "smallarea": 2011,
 }
 WAZIMAP["latest_release_year"] = "2016"
 WAZIMAP["primary_dataset_name"] = "Census and Community Survey"
@@ -60,6 +62,7 @@ WAZIMAP["available_release_years"] = {
     # Other geo_levels have data for all releases.
     "ward": [2011],
     "subplace": [2011],
+    "smallarea": [2011],
 }
 
 WAZIMAP["levels"] = {
@@ -70,8 +73,9 @@ WAZIMAP["levels"] = {
     "province": {"children": ["district", "municipality", "subplace", "ward"]},
     "district": {"children": ["municipality", "subplace", "ward"]},
     "municipality": {"plural": "municipalities", "children": ["subplace"]},
-    "subplace": {"children": []},
+    "subplace": {"children": ["smallarea"]},
     "ward": {"children": []},
+    "smallarea": {"children": []},
 }
 
 WAZIMAP["mapit"] = {"generations": {"2011": "1", "2016": "2", None: "1"}}

@@ -21,6 +21,7 @@ SETTINGS.setdefault(
 SETTINGS.setdefault(
     "level_codes",
     {
+        "smallarea": "SMA",
         "subplace": "SP",
         "ward": "WD",
         "municipality": "MN",
@@ -30,7 +31,8 @@ SETTINGS.setdefault(
     },
 )
 SETTINGS.setdefault(
-    "level_simplify", {"DC": 0.01, "PR": 0.005, "MN": 0.005, "WD": 0.0001, "SP": 0.005}
+    "level_simplify",
+    {"DC": 0.01, "PR": 0.005, "MN": 0.005, "WD": 0.0001, "SP": 0.005, "SMA": 0.0001},
 )
 
 
