@@ -6,7 +6,7 @@ from wazimap.data.tables import get_datatable, get_table_id
 from wazimap.data.utils import get_session, add_metadata
 from wazimap.geo import geo_data
 from dynamic_profile.models import IndicatorProfile, Profile
-from dynamic_profile.utils import get_dynamic_profiles, merge_dicts
+from dynamic_profile.utils import merge_dicts, Section, BuildProfile, BuildIndicator
 
 from wazimap.data.utils import (
     collapse_categories,
@@ -63,11 +63,19 @@ def get_profile(geo, profile_name, request):
     with open("example.json", "w") as f:
         json.dump(data, f)
 
+    # exit()
+
     return data
 
 
 def get_indicator_profile(geo, session):
-    return get_dynamic_profiles(geo, session)
+
+    # profiles = Section(geo, session)
+    # for profile in profiles.keys():
+    #     indicators =
+
+    section = Section(geo, session)
+    return section.build()
 
 
 def get_demographics_profile(geo, session):
