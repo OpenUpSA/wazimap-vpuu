@@ -26,5 +26,6 @@ class VpuuIndicator(BuildIndicator):
         Add calculation of the median age
         """
         head = super(VpuuIndicator, self).header()
-        head["value"] = self.calculate_age_median()
+        if self.profile.title == "Age":
+            head["value"] = self.calculate_age_median()
         return head
