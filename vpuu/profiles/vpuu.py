@@ -18,6 +18,7 @@ from wazimap.data.utils import (
     current_context,
     dataset_context,
 )
+from .build import VpuuIndicator
 
 
 log = logging.getLogger(__name__)
@@ -75,7 +76,7 @@ def get_indicator_profile(geo, session):
     #     indicators =
 
     section = Section(geo, session)
-    return section.build()
+    return section.build(BuildProfile, VpuuIndicator)
 
 
 def get_demographics_profile(geo, session):
