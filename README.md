@@ -3,6 +3,9 @@
 ## Docker Compose Route
 
 1. Run Docker-Compose
+
+Before running ```docker-compose``` unzip the files in the sql directory.
+
 ```
 docker-compose up
 ```
