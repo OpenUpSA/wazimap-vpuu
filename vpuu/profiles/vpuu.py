@@ -116,6 +116,7 @@ def get_demographics_profile(geo, session):
     )
 
     # sex
+
     sex_data, _ = get_stat_data(
         ["gender"],
         geo,
