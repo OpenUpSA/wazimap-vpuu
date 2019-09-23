@@ -58,8 +58,12 @@
 		<p>{{indicator.value}}</p>
 		<p>{{indicator.summary}}</p>
 	    </div>
-	    <div class="column-half">
+	    <div class="column-three-quarters">
+		{% if indicator.stat_values %}
                 <div id="chart-{{indicator.chart_type}}-indicator-{{profile}}-{{forloop.counter0}}-stat_values" data-stat-type="scaled-percentage" data-chart-title="{{indicator.chart_title}}"></div>
+		{% else %}
+		<p> Data not avaliable</p>
+		{% endif %}
 	    </div>
 	</section>
 	{% endfor %}
