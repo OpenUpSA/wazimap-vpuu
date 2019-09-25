@@ -21,6 +21,7 @@ class DataUploadForm(forms.Form):
 
 
 def add_dataset(request):
+    # TODO: secure route
     if request.method == 'POST':
         form = DataUploadForm(request.POST, request.FILES)
         if form.is_valid():
