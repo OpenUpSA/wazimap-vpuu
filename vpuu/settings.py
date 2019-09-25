@@ -17,7 +17,7 @@ ROOT_URLCONF = "vpuu.urls"
 WSGI_APPLICATION = "vpuu.wsgi.application"
 
 
-INSTALLED_APPS = ["vpuu", "dynamic_profile"] + INSTALLED_APPS
+INSTALLED_APPS = ["data_manager.apps.DataManagerConfig", "vpuu", "dynamic_profile"] + INSTALLED_APPS
 
 
 MIDDLEWARE = [
