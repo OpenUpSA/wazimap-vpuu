@@ -7,6 +7,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from django import forms
 from django.contrib.admin import widgets
+from django.contrib.messages import api as messages_api
 
 from wazimap.models import FieldTable
 from dataset_upload import UploadedDataSet
@@ -26,14 +27,19 @@ def add_dataset(request):
         form = DataUploadForm(request.POST, request.FILES)
         if form.is_valid():
             data_file = request.FILES['data_file']
-            handle_uploaded_dataset(request.FILES['data_file'],
-                                    form.cleaned_data['field_table'])
-            return HttpResponseRedirect('/admin/')
+            try:
+                handle_uploaded_dataset(request.FILES['data_file'],
+                                        form.cleaned_data['field_table'])
+                messages_api.success(request, "Successfully uploaded dataset!")
+                return HttpResponseRedirect('/admin/')
+            except Exception as e:
+                log.debug(e)
+                messages_api.error(request, "Error occurred while uploading dataset.")
     else:
         form = DataUploadForm()
     return render(request, 'data_manager/dataset_form.html', {
         'model_name': 'Field table',
-        'form': form
+        'form': form,
     })
 
 
