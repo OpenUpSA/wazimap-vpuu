@@ -23,7 +23,7 @@ class UploadedDataSet(object):
         field_columns = self._field_table.fields
         values_query_segment = ','.join(['%s'] * (len(field_columns) + 4))
         query = sql.SQL("INSERT into {} values(%s)" % values_query_segment)
+        query_string = query.format(table_name)
         for row in self._uploaded_file:
-            query_string = query.format(table_name)
             cursor.execute(query_string, row.strip().split(','))
         connection.commit()
