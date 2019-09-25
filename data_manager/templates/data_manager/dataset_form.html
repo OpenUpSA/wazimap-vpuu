@@ -3,6 +3,8 @@
 {% block title %}Upload data{% endblock %}
 {% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
 {% block content %}
+<div id="content" class="colM">
+  <h1>Upload a Dataset</h1>
   <div id="content-main">
     <form
       enctype="multipart/form-data"
@@ -17,7 +19,6 @@
       <div>
         <div class="submit-row">
           <input type="submit" value="Save" class="default" name="_save" />
-
         </div>
       </div>
     </form>
@@ -33,4 +34,5 @@
     >
     </script>
   {% endblock %} 
+</div>
 {% endblock %} 
