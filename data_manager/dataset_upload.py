@@ -10,30 +10,20 @@ class UploadedDataSet(object):
     def __init__(self, f, field_table):
         self._uploaded_file = f
         self._field_table = field_table
-    
-    def read_file(self):
-        with open('uploaded_dataset.csv', 'wb+') as destination:
-            for chunk in self._uploaded_file.chunks():
-                destination.write(chunk)
-    
-    def validate(self):
-        # Headers: geo_level,geo_code, <field_name>,total,geo_version
-        pass
 
-    def create_dataset(self):
-        # Headers: geo_level,geo_code, <field_name>,total,geo_version
+    def insert_data(self):
+        """
+        Insert data from the uploaded file into the table corresponding to the 
+        FieldTable. We assume the file is in the correct format and contains 
+        valid values.
+        """
         connection = psycopg2.connect(settings.DATABASE_URL)
         cursor = connection.cursor()
-        q = 'SELECT count(*) from {};'.format(self._field_table.name.lower())
-        cursor.execute(q)
-        result = cursor.fetchone()
         table_name = sql.Identifier(self._field_table.name.lower())
-        # TODO: get multiple field columns
-        field_column_name = sql.Identifier(self._field_table.fields[0].lower())
-        query = sql.SQL(
-            "INSERT into {} values(%s,%s,%s,%s,%s)"
-        )
+        field_columns = self._field_table.fields
+        values_query_segment = ','.join(['%s'] * (len(field_columns) + 4))
+        query = sql.SQL("INSERT into {} values(%s)" % values_query_segment)
         for row in self._uploaded_file:
-            query_string = query.format(table_name, field_column_name)
+            query_string = query.format(table_name)
             cursor.execute(query_string, row.strip().split(','))
         connection.commit()

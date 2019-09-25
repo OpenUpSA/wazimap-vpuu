@@ -13,6 +13,7 @@ from dataset_upload import UploadedDataSet
 
 log = logging.getLogger(__name__)
 
+
 class DataUploadForm(forms.Form):
     field_tables = FieldTable.objects.all()
     field_table = forms.ModelChoiceField(field_tables)
@@ -24,9 +25,9 @@ def add_dataset(request):
         form = DataUploadForm(request.POST, request.FILES)
         if form.is_valid():
             data_file = request.FILES['data_file']
-            handle_uploaded_dataset(request.FILES['data_file'], form.cleaned_data['field_table'])
-            # TODO: handle exceptions
-            return HttpResponseRedirect('/admin/data_upload_validate/')
+            handle_uploaded_dataset(request.FILES['data_file'],
+                                    form.cleaned_data['field_table'])
+            return HttpResponseRedirect('/admin/')
     else:
         form = DataUploadForm()
     return render(request, 'data_manager/dataset_form.html', {
@@ -34,6 +35,7 @@ def add_dataset(request):
         'form': form
     })
 
+
 def handle_uploaded_dataset(f, field_table):
     uploaded_dataset = UploadedDataSet(f, field_table)
-    uploaded_dataset.create_dataset()
+    uploaded_dataset.insert_data()
