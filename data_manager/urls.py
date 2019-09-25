@@ -19,8 +19,6 @@ from django.views.generic.base import TemplateView
 from . import views
 
 app_name = "data_manager"
-# urlpatterns = [url(r'^admin/test/$', TemplateView.as_view(template_name='data_manager/dataset_admin.html'))]
 urlpatterns = [
     url(r'^admin/data_manager/data_upload/$', views.add_dataset), 
 ]
-# datamanager_urls = [url(r'^admin/test/$', TemplateView.as_view(template_name='dataset_admin.html'))]
