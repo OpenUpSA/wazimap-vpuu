@@ -7,6 +7,9 @@ log = logging.getLogger(__name__)
 
 
 class UploadedDataSet(object):
+    """
+    Class to create and process datasets that were uploaded from the admin site.
+    """
     def __init__(self, f, field_table):
         self._uploaded_file = f
         self._field_table = field_table
