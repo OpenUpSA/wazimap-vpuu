@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %} 
+{% load staticfiles%}
+{% block title %}Upload data{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+{% block content %}
+  <div id="content-main">
+    <p>Data uploaded</p>
+  </div>
+
+  <br class="clear" />
+
+  {% block admin_change_form_document_ready %}
+    <script type="text/javascript"
+            id="django-admin-form-add-constants"
+            src="{% static 'admin/js/change_form.js' %}"
+            data-model-name="{{ opts.model_name }}"
+    >
+    </script>
+  {% endblock %} 
+{% endblock %} 

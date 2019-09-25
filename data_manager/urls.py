@@ -13,11 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.conf.urls import url
 from django.contrib import admin
-from wazimap import urls
-from data_manager import urls as data_manager_urls
+from django.views.generic.base import TemplateView
+from . import views
 
-urlpatterns = data_manager_urls.urlpatterns + [url(r"^admin/", admin.site.urls)]
-
-urlpatterns += urls.urlpatterns
+app_name = "data_manager"
+# urlpatterns = [url(r'^admin/test/$', TemplateView.as_view(template_name='data_manager/dataset_admin.html'))]
+urlpatterns = [url(r'^admin/data_upload/$', views.add_dataset), url(r'^admin/data_upload_validate/$', views.validate_dataset)]
+# datamanager_urls = [url(r'^admin/test/$', TemplateView.as_view(template_name='dataset_admin.html'))]
