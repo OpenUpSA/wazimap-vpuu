@@ -35,8 +35,9 @@ def add_dataset(request):
                 return HttpResponseRedirect('/admin/')
             except Exception as e:
                 log.debug(e)
-                messages_api.error(request,
-                                   "Error occurred while uploading dataset.")
+                messages_api.error(
+                    request,
+                    "Error occurred while uploading dataset: {}".format(e))
     else:
         form = DataUploadForm()
     return render(request, 'data_manager/dataset_form.html', {
