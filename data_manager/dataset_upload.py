@@ -22,11 +22,9 @@ class UploadedDataSet(object):
         """
         connection = psycopg2.connect(settings.DATABASE_URL)
         cursor = connection.cursor()
-        table_name = sql.Identifier(self._field_table.name.lower())
-        field_columns = self._field_table.fields
-        values_query_segment = ','.join(['%s'] * (len(field_columns) + 4))
-        query = sql.SQL("INSERT into {} values(%s)" % values_query_segment)
-        query_string = query.format(table_name)
-        for row in self._uploaded_file:
-            cursor.execute(query_string, row.strip().split(','))
+
+        table_name = self._field_table.name.lower()
+
+        cursor.copy_from(self._uploaded_file, table_name, sep=',')
+
         connection.commit()
