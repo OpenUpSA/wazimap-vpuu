@@ -1,0 +1,38 @@
+{% extends "admin/base_site.html" %} 
+{% load staticfiles%}
+{% block title %}Upload data{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+{% block content %}
+<div id="content" class="colM">
+  <h1>Upload a Dataset</h1>
+  <div id="content-main">
+    <form
+      enctype="multipart/form-data"
+      action=""
+      method="post"
+      id="fieldtable_form"
+      novalidate=""
+      action="/admin/data_upload/"
+    >
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div>
+        <div class="submit-row">
+          <input type="submit" value="Save" class="default" name="_save" />
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <br class="clear" />
+
+  {% block admin_change_form_document_ready %}
+    <script type="text/javascript"
+            id="django-admin-form-add-constants"
+            src="{% static 'admin/js/change_form.js' %}"
+            data-model-name="{{ opts.model_name }}"
+    >
+    </script>
+  {% endblock %} 
+</div>
+{% endblock %} 

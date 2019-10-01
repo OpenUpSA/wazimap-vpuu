@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
-from wazimap import urls
-from data_manager import urls as data_manager_urls
+from django.views.generic.base import TemplateView
+from . import views
 
-urlpatterns = data_manager_urls.urlpatterns + [url(r"^admin/", admin.site.urls)]
-
-urlpatterns += urls.urlpatterns
+app_name = "data_manager"
+urlpatterns = [
+    url(r'^admin/data_manager/data_upload/$', views.add_dataset), 
+]
