@@ -52,11 +52,15 @@
 		{% endif %}
             </div>
             <div class="location-nav__search">
-		    <div class="location-search__icon"><img src="{% static 'images/search-24px.svg' %}" alt=""></div><input type="text" maxlength="256" name="Location-Search" data-name="Location Search" placeholder="Find another location..." class="location-search__field w-input"></div>
+		        <div class="location-search__icon"><img src="{% static 'images/search-24px.svg' %}" alt=""></div><input type="text" maxlength="256" name="Location-Search" data-name="Location Search" placeholder="Find another location..." class="location-search__field w-input"></div>
 	</div>
     </div>
 </div>
-{{block.super}}
+<div id="cover-map" class="clearfix">
+    <div id="slippy-map"></div>
+    <div id="cover-profile" class="wrapper">
+    </div>
+</div>
 {% endblock %}
 
 {% block profile_detail %}
@@ -122,46 +126,46 @@
     <section class="sub-section">
 	<section id="{{indicator.title}}" data-scroll-time="1.25" class="sub-section-block__scroll"></section>
 	<div class="sub-section-header">
-            <div class="grid__module_container">
-		<div class="sub-section-header__plate">
-		    <div class="sub-section-header__title">
-			<h3 class="sub-section__heading">{{indicator.title}}</h3>
+	    <div class="grid__module_container">
+			    <div class="sub-section-header__plate">
+			    <div class="sub-section-header__title">
+				    <h3 class="sub-section__heading">{{indicator.title}}</h3>
 		    </div>
-		    <div class="sub-section-header__data-source">
-			<div data-delay="0" class="data-source__menu w-dropdown">
-			    <div class="data-source__menu_trigger w-dropdown-toggle">
-				<div class="data-source__menu_label">Community Survey 2016</div>
-				<img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3814f6ca62b6279bac981e_Expand-less.svg" alt="" class="data-source__menu_arrow">
+			    <div class="sub-section-header__data-source">
+				    <div data-delay="0" class="data-source__menu w-dropdown">
+				    <div class="data-source__menu_trigger w-dropdown-toggle">
+					    <div class="data-source__menu_label">Community Survey 2016</div>
+					    <img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3814f6ca62b6279bac981e_Expand-less.svg" alt="" class="data-source__menu_arrow">
 			    </div>
-			    <nav class="data-source__menu_list w-dropdown-list">
-				<a href="#" class="data-source__menu_item w-dropdown-link">ISSP</a>
-				<a href="#" class="data-source__menu_item w-dropdown-link">Community Survey 2016</a>
-				<a href="#" class="data-source__menu_item cc-last w-dropdown-link">Census 2011</a>
+				    <nav class="data-source__menu_list w-dropdown-list">
+					    <a href="#" class="data-source__menu_item w-dropdown-link">ISSP</a>
+					    <a href="#" class="data-source__menu_item w-dropdown-link">Community Survey 2016</a>
+					    <a href="#" class="data-source__menu_item cc-last w-dropdown-link">Census 2011</a>
 			    </nav>
 			</div>
 		    </div>
 		</div>
             </div>
-	</div>
+		</div>
 	<div class="sub-section__data-source">
-            <div class="grid__module_container"></div>
-	</div>
+	    <div class="grid__module_container"></div>
+		</div>
 	<div class="sub-section__indicator">
             <div class="grid__module_container">
 		<div class="grid__module_row">
 		    <div class="grid__module_col col_3 col_m_4 col_sm_12 flex">
-			<div class="indicator__main">
-			    <div class="indicator__main__item">
-				<div class="indicator__value">
-				    <div class="indicator__value__number">{{indicator.value}}</div>
-				    <div class="indicator__value__label">{{indicator.summary}}</div>
+						<div class="indicator__main">
+						<div class="indicator__main__item">
+							<div class="indicator__value">
+							<div class="indicator__value__number">{{indicator.value}}</div>
+							<div class="indicator__value__label">{{indicator.summary}}</div>
 				</div>
-				<div class="indicator__context">
-				    <div class="indicator__value__context">{{indicator.info}}</div>
+							<div class="indicator__context">
+							<div class="indicator__value__context">{{indicator.info}}</div>
 				</div>
 			    </div>
 			</div>
-		    </div>
+				    </div>
 		    <div class="grid__module_col flex">
 			<div class="charts_container">
 			    {% if indicator.stat_values %}
@@ -169,21 +173,21 @@
 				<div class="chart__header">
 				    <h4 class="indicator__chart__title">{{indicator.chart_title}}</h4>
 				    <div class="indicator__chart__links">
-					<a href="/data/map/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.geo_level}}|{{geography.this.parent_geoid}}&release={{indicator.stat_values.metadata.year}}" class="nav-button nav-button--small hide-m w-inline-block">
-					    <div class="nav-button__label hide-xs">Map dataset</div>
+										<a href="/data/map/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.geo_level}}|{{geography.this.parent_geoid}}&release={{indicator.stat_values.metadata.year}}" class="nav-button nav-button--small hide-m w-inline-block">
+										<div class="nav-button__label hide-xs">Map dataset</div>
 					</a>
-					<div data-delay="0" data-hover="1" class="chart__menu w-dropdown">
-					    <div class="chart__menu_trigger w-dropdown-toggle">
-						<img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3abdd95216e301459267ab_baseline-more_vert-24px.svg" alt="" class="small-icon">
+										<div data-delay="0" data-hover="1" class="chart__menu w-dropdown">
+										<div class="chart__menu_trigger w-dropdown-toggle">
+											<img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3abdd95216e301459267ab_baseline-more_vert-24px.svg" alt="" class="small-icon">
 					    </div>
-					    <nav class="chart__menu_list w-dropdown-list">
-						<a id="{{indicator.stat_values.metadata.table_id}}" href="#" class="chart__menu_item w-dropdown-link chart-show-embed chart-menu-dropdown-item">Embed this chart</a>
-						<a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}" class="chart__menu_item w-dropdown-link">Explore data</a>
-						<a href="/data/distribution/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.geo_level}}|{{geography.this.parent_geoid}}&release={{indicator.stat_values.metadata.year}}" class="chart__menu_item w-dropdown-link">Compare data</a>
-						<div class="chart__menu_item cc-download">Download data:</div>
-						<div class="div-block">
-						    <a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=xlsx" class="chart__menu_item cc-download-option w-dropdown-link">Excel</a>
-						    <a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=csv" class="chart__menu_item cc-download-option w-dropdown-link">CSV</a>
+										<nav class="chart__menu_list w-dropdown-list">
+											<a id="{{indicator.stat_values.metadata.table_id}}" href="#" class="chart__menu_item w-dropdown-link chart-show-embed chart-menu-dropdown-item">Embed this chart</a>
+											<a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}" class="chart__menu_item w-dropdown-link">Explore data</a>
+											<a href="/data/distribution/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.geo_level}}|{{geography.this.parent_geoid}}&release={{indicator.stat_values.metadata.year}}" class="chart__menu_item w-dropdown-link">Compare data</a>
+											<div class="chart__menu_item cc-download">Download data:</div>
+											<div class="div-block">
+											<a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=xlsx" class="chart__menu_item cc-download-option w-dropdown-link">Excel</a>
+											<a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=csv" class="chart__menu_item cc-download-option w-dropdown-link">CSV</a>
 						    <a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=geojson" class="chart__menu_item cc-download-option w-dropdown-link">GeoJSON</a>
 						    <a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=kml" class="chart__menu_item cc-download-option last w-dropdown-link">KML</a>
 						</div>
