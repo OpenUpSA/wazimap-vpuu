@@ -13,20 +13,23 @@
 {{ block.super }}
 
 {% if crime %}
-  <script type="text/javascript">
-  $('#citations ul').append(
-    $('<li>')
-      .append($('<b>').append('{{ crime.metadata.release }}' + ': '))
-      .append('{{ crime.metadata.citation }}')
-      .append(_.escape('<' + window.location.href + '>'))
-  );
-  </script>
+<script type="text/javascript">
+ $('#citations ul').append(
+     $('<li>')
+	 .append($('<b>').append('{{ crime.metadata.release }}' + ': '))
+	 .append('{{ crime.metadata.citation }}')
+	 .append(_.escape('<' + window.location.href + '>'))
+ );
+</script>
 {% endif %}
 
+{% block profile_preamble %}
+{% endblock %}
+
 <script type="text/javascript">
-$('.release-list').hover(function() {
-    $(this).find('.sub-group').toggle();
-});
+ $('.release-list').hover(function() {
+     $(this).find('.sub-group').toggle();
+ });
 </script>
 
 {% if head2head %}

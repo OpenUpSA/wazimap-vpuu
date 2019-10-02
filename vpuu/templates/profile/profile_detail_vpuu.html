@@ -3,74 +3,234 @@
 {% block head_meta_description %}Population data and election figures from {{ geography.this.short_name}}, broken down by category: Demographics, Service delivery, Economics and Education.{% endblock %}
 
 {% block header_content %}
-<div class="floating-nav-wrapper">
-    <nav class="floating-nav">
-        <div class="wrapper clearfix">
-            <h3><img src="{% static 'img/wazi-logo.png' %}">{{ geography.this.name }}</h3>
-            <ul>
-                <li><a href="#elections"><i class="fa fa-check"></i> <span>Elections</span></a></li>
-                <li><a href="#demographics"><i class="fa fa-user"></i> <span>Demographics</span></a></li>
-                <li><a href="#households"><i class="fa fa-home"></i> <span>Households</span></a></li>
-                <li><a href="#service_delivery"><i class="fa fa-bolt"></i> <span>Service Delivery</span></a></li>
-                <li><a href="#economics"><i class="fa fa-money"></i> <span>Economics</span></a></li>
-                <li><a href="#education"><i class="fa fa-graduation-cap"></i> <span>Education</span></a></li>
-                <li><a href="#children"><i class="fa fa-child"></i> <span>Children</span></a></li>
-                <li><a href="#child_headed_households"><i class="fa fa-child"></i> <i class="fa fa-child fa-tiny"></i> <span>Child-headed Households</span></a></li>
-            </ul>
-        </div>
-    </nav>
-</div>
-
-{{ block.super }}
-{% endblock %}
-
-{% block profile_header_tail %}
-<div class="column-full">
-    <strong>{{ primary_releases.active.name }} {{ primary_releases.active.year }}</strong>
-    {% if primary_releases.other %}
-    <div class="tool-group toggle-sub-group release-list">
-        <a>Change release<i class="fa fa-chevron-circle-down"></i></a>
-        <ul class="sub-group" style="display: none;">
-        {% for release in primary_releases.other %}
-            <li><a href="{{ request.path }}?release={{release.year}}">{{ release.name }} {{ release.year }}</a></li>
-            {% endfor %}
-        </ul>
+<div class="location-meta">
+    <div class="grid__module_container">
+	<div class="location-meta__inner">
+            <a href="#page-top" class="location-meta__inner__first w-inline-block">
+		<h1 class="location-meta__place-name">{{ geography.this.short_name }}<br></h1>
+		<div class="location-meta__place-name__label">
+		    {{ geography.this.geo_level|capfirst }}
+                    {% if geography.parents %}
+                    in
+                    {% for level, g in geography.parents.items %}
+                    {{ g.short_name }}
+		    {% if not forloop.last %},{%endif%}
+                    {% endfor %}
+                    {% endif %}
+		</div>
+            </a>
+            <div class="location-meta__inner__last">
+		<div class="location-meta__metric location-meta__metric--last">
+		    <div class="location-meta__metric__value">1,201,201</div>
+		    <div class="location-meta__metric__label">People</div>
+		</div>
+		<div class="location-meta__metric">
+		    <div class="location-meta__metric__value">272.6</div>
+		    <div class="location-meta__metric__label">km²</div>
+		</div>
+		<div class="location-meta__metric location-meta__metric--first">
+		    <div class="location-meta__metric__value">5099</div>
+		    <div class="location-meta__metric__label">People / km²</div>
+		</div>
+            </div>
+	</div>
     </div>
-    {% endif %}
 </div>
+<div class="location-nav">
+    <div class="grid__module_container">
+	<div class="location-nav__inner">
+            <div class="location-nav__crumbs"><a href="#" class="nav-button location-nav__link__more show-xs w-inline-block"><img src="images/more-horiz-24px.svg" alt=""></a>
+		{% if geography.parents %}
+		{% for level,g in geography.parents.items  reversed %}
+		<a href="/profiles/{{ g.full_geoid }}-{{ g.short_name|slugify }}/" class="nav-button hide-xs w-inline-block">
+		    <div class="button-label">{{g.short_name}}</div>
+		</a>{% if not forloop.last %}{%endif%}
+		{% endfor %}
+		<a href="#" class="nav-button nav-button--active w-inline-block">
+		    <div class="nav-button__label">{{ geography.this.short_name }}</div>
+		</a>
+		{% endif %}
+            </div>
+            <div class="location-nav__search">
+		    <div class="location-search__icon"><img src="{% static 'images/search-24px.svg' %}" alt=""></div><input type="text" maxlength="256" name="Location-Search" data-name="Location Search" placeholder="Find another location..." class="location-search__field w-input"></div>
+	</div>
+    </div>
+</div>
+{{block.super}}
 {% endblock %}
 
 {% block profile_detail %}
-{% for profile, values in indicator.items %}
-<article id="{{profile}}" class="clearfix">
-    <header class="section-contents">
-        <h1><i class="fa fa-fw fa-user"></i> {{profile}}</h1>
-    </header>
-    <div class="section-container">
-	{% for indicator in values %}
-	<section class="clearfix stat-row">
-	    <h2 class="header-for-columns">
-		<a class="permalink" href="#pop_count" id="pop_count">
-		    {{indicator.header}} <i class="fa fa-link"></i>
+<style>
+ .action-links{
+     display:none;
+ }
+ .chart-qualifier{
+     display:none;
+ }
+</style>
+<div class="data-nav">
+    <div class="grid__module_container">
+	<div class="data-nav__inner">
+            <div class="section-nav__links">
+		{% for profile,values in indicator.items %}
+		<a href="#{{profile}}" class="nav-button nav-button--section w-inline-block">
+		    <div class="nav-button__label nav-button__label--icon-left hide-xs">{{profile}}</div>
 		</a>
-	    </h2>
-	    <div class="column-quarter">
-		<p>{{indicator.value}}</p>
-		<p>{{indicator.summary}}</p>
+		{% endfor %}
 	    </div>
-	    <div class="column-three-quarters">
-		{% if indicator.stat_values %}
-                <div id="chart-{{indicator.chart_type}}-indicator-{{profile}}-{{forloop.counter0}}-stat_values" data-stat-type="scaled-percentage" data-chart-title="{{indicator.chart_title}}"></div>
-		{% else %}
-		<p> Data not avaliable</p>
-		{% endif %}
-	    </div>
-	</section>
-	{% endfor %}
+	</div>
     </div>
-</article>
+</div>
+<div class="data-comparison">
+    <div class="grid__module_container">
+	<div class="data-comaprison__plate">
+            <h4 class="data-comparison__title">COMPARE TO ANOTHER LOCATION</h4><input type="text" class="data-comparison__field w-input" maxlength="256" name="Location-comparison" data-name="Location comparison" placeholder="Search for comparison location..." id="Location-comparison"></div>
+    </div>
+</div>
+{% for profile, values in indicator.items %}
+<section class="data-section">
+    <section id="{{profile}}" data-scroll-time="1.25" class="section-block__scroll"></section>
+    <header class="sub-section-header">
+	<div class="grid__module_container">
+            <div class="section-header__plate">
+		<div class="sub-section-header__title"><img src="{% static 'images/people-white-24px.svg' %}" width="24" height="24" alt="" class="section-nav__icon">
+		    <h2 class="section-nav__heading">{{profile}}</h2>
+		</div>
+		<div class="section-header__share">
+		    <a href="#" class="nav-button nav-button--small nav-button--light w-inline-block">
+			<img src="{% static 'images/share-white-24px.svg' %}" width="20" height="20" alt="">
+			<div class="nav-button__label hide-xs">share</div>
+		    </a>
+		</div>
+            </div>
+	</div>
+    </header>
+    <div class="section-nav">
+	<div class="grid__module_container">
+            <div class="section-nav__plate">
+		<div class="section-nav__links">
+		    {% for indicators in values %}
+		    <a href="#{{indicators.title}}" class="nav-button nav-button--subsection w-inline-block">
+			<div class="nav-button__label">{{indicators.title}}</div>
+		    </a>
+		    {% endfor %}
+		</div>
+            </div>
+	</div>
+    </div>
+    {% for indicator in values %}
+    <section class="sub-section">
+	<section id="{{indicator.title}}" data-scroll-time="1.25" class="sub-section-block__scroll"></section>
+	<div class="sub-section-header">
+            <div class="grid__module_container">
+		<div class="sub-section-header__plate">
+		    <div class="sub-section-header__title">
+			<h3 class="sub-section__heading">{{indicator.title}}</h3>
+		    </div>
+		    <div class="sub-section-header__data-source">
+			<div data-delay="0" class="data-source__menu w-dropdown">
+			    <div class="data-source__menu_trigger w-dropdown-toggle">
+				<div class="data-source__menu_label">Community Survey 2016</div>
+				<img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3814f6ca62b6279bac981e_Expand-less.svg" alt="" class="data-source__menu_arrow">
+			    </div>
+			    <nav class="data-source__menu_list w-dropdown-list">
+				<a href="#" class="data-source__menu_item w-dropdown-link">ISSP</a>
+				<a href="#" class="data-source__menu_item w-dropdown-link">Community Survey 2016</a>
+				<a href="#" class="data-source__menu_item cc-last w-dropdown-link">Census 2011</a>
+			    </nav>
+			</div>
+		    </div>
+		</div>
+            </div>
+	</div>
+	<div class="sub-section__data-source">
+            <div class="grid__module_container"></div>
+	</div>
+	<div class="sub-section__indicator">
+            <div class="grid__module_container">
+		<div class="grid__module_row">
+		    <div class="grid__module_col col_3 col_m_4 col_sm_12 flex">
+			<div class="indicator__main">
+			    <div class="indicator__main__item">
+				<div class="indicator__value">
+				    <div class="indicator__value__number">{{indicator.value}}</div>
+				    <div class="indicator__value__label">{{indicator.summary}}</div>
+				</div>
+				<div class="indicator__context">
+				    <div class="indicator__value__context">{{indicator.info}}</div>
+				</div>
+			    </div>
+			</div>
+		    </div>
+		    <div class="grid__module_col flex">
+			<div class="charts_container">
+			    {% if indicator.stat_values %}
+			    <div class="chart__container">
+				<div class="chart__header">
+				    <h4 class="indicator__chart__title">{{indicator.chart_title}}</h4>
+				    <div class="indicator__chart__links">
+					<a href="/data/map/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.geo_level}}|{{geography.this.parent_geoid}}&release={{indicator.stat_values.metadata.year}}" class="nav-button nav-button--small hide-m w-inline-block">
+					    <div class="nav-button__label hide-xs">Map dataset</div>
+					</a>
+					<div data-delay="0" data-hover="1" class="chart__menu w-dropdown">
+					    <div class="chart__menu_trigger w-dropdown-toggle">
+						<img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3abdd95216e301459267ab_baseline-more_vert-24px.svg" alt="" class="small-icon">
+					    </div>
+					    <nav class="chart__menu_list w-dropdown-list">
+						<a id="{{indicator.stat_values.metadata.table_id}}" href="#" class="chart__menu_item w-dropdown-link chart-show-embed chart-menu-dropdown-item">Embed this chart</a>
+						<a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}" class="chart__menu_item w-dropdown-link">Explore data</a>
+						<a href="/data/distribution/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.geo_level}}|{{geography.this.parent_geoid}}&release={{indicator.stat_values.metadata.year}}" class="chart__menu_item w-dropdown-link">Compare data</a>
+						<div class="chart__menu_item cc-download">Download data:</div>
+						<div class="div-block">
+						    <a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=xlsx" class="chart__menu_item cc-download-option w-dropdown-link">Excel</a>
+						    <a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=csv" class="chart__menu_item cc-download-option w-dropdown-link">CSV</a>
+						    <a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=geojson" class="chart__menu_item cc-download-option w-dropdown-link">GeoJSON</a>
+						    <a href="/data/table/?table={{indicator.stat_values.metadata.table_id}}&primary_geo_id={{geography.this.full_geoid}}&geo_ids={{geography.this.full_geoid}}{% for parent,geo in geography.parents.items %},{{ geo.full_geoid }}{% endfor %}&release={{indicator.stat_values.metadata.year}}&format=kml" class="chart__menu_item cc-download-option last w-dropdown-link">KML</a>
+						</div>
+					    </nav>
+					</div>
+				    </div>
+				</div>
+				<div class="chart__block">
+				    <div class="column-full" id="chart-{{indicator.chart_type}}-indicator-{{profile}}-{{forloop.counter0}}-stat_values" data-stat-type="scaled-percentage" style="border-left:none"></div>
+				</div>
+				<div class="chart__source">
+				    <div class="chart__source__label">Source:</div><a href="#" class="chart__source__link">{{indicator.stat_values.metadata.release}}</a>
+				    <div class="data-source">
+					<div class="data-source__icon"><img src="{% static 'images/arrow-up-circle-24px.svg' %}" width="16" height="16" alt=""></div>
+					<div class="data-source__label">Official</div>
+				    </div>
+				</div>
+			    </div>
+			    {% endif %}
+			</div>
+		    </div>
+		</div>
+		<div class="grid__module_row">
+		    <div class="grid__module_col col_12">
+			<div class="sub-section__footer">
+			    <div class="sub-section__footnote">
+				<div class="text-block"></div>
+			    </div>
+			</div>
+		    </div>
+		</div>
+            </div>
+	</div>
+    </section>
+    {% endfor %}
+</section>
 {% endfor %}
-
+<script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.4.1.min.220afd743d.js" type="text/javascript" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="js/webflow.js" type="text/javascript"></script>
+<!-- [if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif] -->
+<script>
+ setTimeout(function() {
+     $('.w-webflow-badge').css({
+         'display': 'none !important'
+     });
+ }, 2000);
+</script>
 
 {% block citations %}
 {% include "profile/_blocks/_change_release.html" %}
