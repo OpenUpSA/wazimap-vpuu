@@ -54,7 +54,10 @@
 		{% endif %}
             </div>
             <div class="location-nav__search">
-		        <div class="location-search__icon"><img src="{% static 'images/search-24px.svg' %}" alt=""></div><input type="text" maxlength="256" name="Location-Search" data-name="Location Search" placeholder="Find another location..." class="location-search__field w-input"></div>
+		<div class="location-search__icon">
+		    <img src="{% static 'images/search-24px.svg' %}" alt=""></div>
+		    <input id="geography-select" type="text" maxlength="256" name="Location-Search" data-name="Location Search" placeholder="Find another location..." class="location-search__field w-input">
+	    </div>
 	</div>
     </div>
 </div>
