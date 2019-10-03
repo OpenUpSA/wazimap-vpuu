@@ -24,7 +24,7 @@ from .build import VpuuIndicator
 log = logging.getLogger(__name__)
 
 
-PROFILE_SECTIONS = ("indicator",)
+PROFILE_SECTIONS = ("indicator", "population")
 
 
 def get_profile(geo, profile_name, request):
@@ -42,20 +42,22 @@ def get_profile(geo, profile_name, request):
             if function_name in globals():
                 func = globals()[function_name]
                 data[section] = func(geo, session)
-
-                # get profiles for comparative geometries
-                for comp_geo in comparative_geos:
-                    try:
-                        merge_dicts(
-                            data[section], func(comp_geo, session), comp_geo.geo_level
-                        )
-                    except KeyError as e:
-                        msg = (
-                            "Error merging data into %s for section '%s' from %s: KeyError: %s"
-                            % (geo.geoid, section, comp_geo.geoid, e)
-                        )
-                        log.fatal(msg, exc_info=e)
-                        raise ValueError(msg)
+                if section == "indicator":
+                    # get profiles for comparative geometries
+                    for comp_geo in comparative_geos:
+                        try:
+                            merge_dicts(
+                                data[section],
+                                func(comp_geo, session),
+                                comp_geo.geo_level,
+                            )
+                        except KeyError as e:
+                            msg = (
+                                "Error merging data into %s for section '%s' from %s: KeyError: %s"
+                                % (geo.geoid, section, comp_geo.geoid, e)
+                            )
+                            log.fatal(msg, exc_info=e)
+                            raise ValueError(msg)
     finally:
         session.close()
 
@@ -77,6 +79,16 @@ def get_indicator_profile(geo, session):
 
     section = Section(geo, session)
     return section.build(BuildProfile, VpuuIndicator)
+
+
+def get_population_profile(geo, session):
+    """
+    Get population of geography
+    """
+    _, total_pop = get_stat_data(
+        ["population group"], geo, session, table_dataset="Census and Community Survey"
+    )
+    return {"geography_population": total_pop, "density": total_pop / geo.square_kms}
 
 
 def get_demographics_profile(geo, session):

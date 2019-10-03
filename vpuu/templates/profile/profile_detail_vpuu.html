@@ -21,15 +21,17 @@
             </a>
             <div class="location-meta__inner__last">
 		<div class="location-meta__metric location-meta__metric--last">
-		    <div class="location-meta__metric__value">1,201,201</div>
+		    <div class="location-meta__metric__value">{{population.geography_population}}</div>
 		    <div class="location-meta__metric__label">People</div>
 		</div>
 		<div class="location-meta__metric">
-		    <div class="location-meta__metric__value">272.6</div>
+		    <div class="location-meta__metric__value">
+			{% if geography.this.square_kms < 1.0 %}{{ geography.this.square_kms|floatformat:"3" }}{% else %}{{ geography.this.square_kms|floatformat:"1" }}{% endif %}
+		    </div>
 		    <div class="location-meta__metric__label">km²</div>
 		</div>
 		<div class="location-meta__metric location-meta__metric--first">
-		    <div class="location-meta__metric__value">5099</div>
+		    <div class="location-meta__metric__value">{{population.density|floatformat:"1"}}</div>
 		    <div class="location-meta__metric__label">People / km²</div>
 		</div>
             </div>
