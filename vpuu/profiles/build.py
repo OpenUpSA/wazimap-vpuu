@@ -24,23 +24,29 @@ class VpuuIndicator(BuildIndicator):
                 "National 2014": {
                     "year": "2014",
                     "turnout": "VOTER_TURNOUT_NATIONAL_2014",
+                    "geo_version": "2011",
                 },
                 "Provincial 2014": {
                     "year": "2014",
                     "turnout": "VOTER_TURNOUT_PROVINCIAL_2014",
+                    "geo_version": "2011",
                 },
                 "Municipal 2016": {
                     "year": "2016",
                     "turnout": "VOTER_TURNOUT_MUNICIPAL_2016",
+                    "geo_version": "2016",
                 },
                 "Municipal 2011": {
                     "year": "2011",
                     "turnout": "VOTER_TURNOUT_MUNICIPAL_2011",
+                    "geo_version": "2011",
                 },
             }
 
     def elections(self):
         with dataset_context(year=self.election_dates[self.profile.title]["year"]):
+            current_version = self.geo.version
+            self.geo.version = self.election_dates[self.profile.title]["geo_version"]
             try:
                 party_data, total_valid_votes = get_stat_data(
                     ["party"],
@@ -56,21 +62,45 @@ class VpuuIndicator(BuildIndicator):
                     order_by=self.profile.order_by,
                 )
                 group_remainder(party_data, self.profile.group_remainder)
+                self.geo.version = current_version
                 return {"stat_values": party_data, "total": total_valid_votes}
-            except DataNotFound:
+            except DataNotFound as error:
+                print(error)
+                self.geo.version = current_version
                 return {}
 
     def election_turnout(self):
         """
         Get the number of registred voters
         """
+        current_version = self.geo.version
+        self.geo.version = self.election_dates[self.profile.title]["geo_version"]
+
         table = get_datatable(self.election_dates[self.profile.title]["turnout"])
-        return table.get_stat_data(
+        results = table.get_stat_data(
             self.geo,
             "registered_voters",
             percent=False,
             year=self.election_dates[self.profile.title]["year"],
         )[0]["registered_voters"]["values"]["this"]
+
+        self.geo.version = current_version
+        return results
+
+    def extra_headers(self):
+        current_version = self.geo.version
+        self.geo.version = self.election_dates[self.profile.title]["geo_version"]
+
+        table = get_datatable(self.election_dates[self.profile.title]["turnout"])
+        results = table.get_stat_data(
+            self.geo,
+            "total_votes",
+            percent=True,
+            total="registered_voters",
+            year=self.election_dates[self.profile.title]["year"],
+        )[0]["total_votes"]["values"]["this"]
+        self.geo.version = current_version
+        return results
 
     def calculate_age_median(self):
         if self.profile.title == "Total Population":
@@ -91,6 +121,11 @@ class VpuuIndicator(BuildIndicator):
             head["value"] = self.calculate_age_median()
         elif self.profile.profile.name == "Elections":
             head["value"] = self.election_turnout()
+            head["extra_headers"] = {
+                "value": self.extra_headers(),
+                "summary": "Of registered voters cast their vote",
+            }
+
         return head
 
     def landcover(self):
