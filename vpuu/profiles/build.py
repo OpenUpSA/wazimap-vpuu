@@ -18,7 +18,7 @@ class VpuuIndicator(BuildIndicator):
         super(VpuuIndicator, self).__init__(*args, **kwargs)
 
     def calculate_age_median(self):
-        if self.profile.title == "Age":
+        if self.profile.title == "Total Population":
             age_table = get_datatable("ageincompletedyears")
             objects = sorted(
                 age_table.get_rows_for_geo(self.geo, self.session),
@@ -32,7 +32,7 @@ class VpuuIndicator(BuildIndicator):
         Add calculation of the median age
         """
         head = super(VpuuIndicator, self).header()
-        if self.profile.title == "Age":
+        if self.profile.title == "Total Population":
             head["value"] = self.calculate_age_median()
         return head
 
