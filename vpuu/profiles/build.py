@@ -18,6 +18,43 @@ class VpuuIndicator(BuildIndicator):
         super(VpuuIndicator, self).__init__(*args, **kwargs)
         self.load_elections()
 
+    def refuse_disposal(self):
+        """
+        show header for refuse
+        """
+        pass
+
+    def water(self):
+        """
+        show header stats for water
+        """
+        pass
+
+    def toilet(self):
+        """
+        Show header stats for toilet facilities
+        """
+
+        toilet_data, total_toilet = get_stat_data()
+
+        total_flush_toilet = 0.0
+        total_no_toilet = 0.0
+        for key, data in self.distribution.items():
+            if key.startswith("Flush") or key.startswith("Chemical"):
+                total_flush_toilet += data["numerators"]["this"]
+            if key == "None":
+                total_no_toilet += data["numerators"]["this"]
+        # "percentage_flush_toilet_access": {
+        #     "name": "Have access to flush or chemical toilets",
+        #     "numerators": {"this": total_flush_toilet},
+        #     "values": {"this": percent(total_flush_toilet, total_toilet)},
+        # },
+        # "percentage_no_toilet_access": {
+        #     "name": "Have no access to any toilets",
+        #     "numerators": {"this": total_no_toilet},
+        #     "values": {"this": percent(total_no_toilet, total_toilet)},
+        return
+
     def load_elections(self):
         if self.profile.profile.name == "Elections":
             self.election_dates = {
@@ -125,6 +162,8 @@ class VpuuIndicator(BuildIndicator):
                 "value": self.extra_headers(),
                 "summary": "Of registered voters cast their vote",
             }
+        else:
+            head = head
 
         return head
 
