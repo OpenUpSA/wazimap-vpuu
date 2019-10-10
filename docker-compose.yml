@@ -10,7 +10,7 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@db/postgres
     expose:
       - "8000"
-    command: bash -c "python manage.py migrate --noinput && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python3 manage.py migrate --noinput && python3 manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/vpuu
     ports:
