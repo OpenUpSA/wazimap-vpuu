@@ -85,6 +85,7 @@ def get_population_profile(geo, session):
     """
     Get population of geography
     """
+
     _, total_pop = get_stat_data(
         ["population group"], geo, session, table_dataset="Census and Community Survey"
     )

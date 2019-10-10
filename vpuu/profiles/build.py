@@ -1,4 +1,4 @@
-from dynamic_profile.utils import BuildIndicator
+from dynamic_profile.utils import BuildIndicator, enhance_api_data
 from wazimap.data.tables import get_datatable
 from wazimap.data.utils import (
     calculate_median,
@@ -7,6 +7,8 @@ from wazimap.data.utils import (
     group_remainder,
 )
 from wazimap.models.data import DataNotFound
+from wazimap.geo import geo_data
+import pdb
 
 
 class VpuuIndicator(BuildIndicator):
@@ -17,43 +19,6 @@ class VpuuIndicator(BuildIndicator):
     def __init__(self, *args, **kwargs):
         super(VpuuIndicator, self).__init__(*args, **kwargs)
         self.load_elections()
-
-    def refuse_disposal(self):
-        """
-        show header for refuse
-        """
-        pass
-
-    def water(self):
-        """
-        show header stats for water
-        """
-        pass
-
-    def toilet(self):
-        """
-        Show header stats for toilet facilities
-        """
-
-        toilet_data, total_toilet = get_stat_data()
-
-        total_flush_toilet = 0.0
-        total_no_toilet = 0.0
-        for key, data in self.distribution.items():
-            if key.startswith("Flush") or key.startswith("Chemical"):
-                total_flush_toilet += data["numerators"]["this"]
-            if key == "None":
-                total_no_toilet += data["numerators"]["this"]
-        # "percentage_flush_toilet_access": {
-        #     "name": "Have access to flush or chemical toilets",
-        #     "numerators": {"this": total_flush_toilet},
-        #     "values": {"this": percent(total_flush_toilet, total_toilet)},
-        # },
-        # "percentage_no_toilet_access": {
-        #     "name": "Have no access to any toilets",
-        #     "numerators": {"this": total_no_toilet},
-        #     "values": {"this": percent(total_no_toilet, total_toilet)},
-        return
 
     def load_elections(self):
         if self.profile.profile.name == "Elections":
@@ -100,6 +65,7 @@ class VpuuIndicator(BuildIndicator):
                 )
                 group_remainder(party_data, self.profile.group_remainder)
                 self.geo.version = current_version
+                party_data = enhance_api_data(party_data)
                 return {"stat_values": party_data, "total": total_valid_votes}
             except DataNotFound as error:
                 print(error)
@@ -112,6 +78,7 @@ class VpuuIndicator(BuildIndicator):
         """
         current_version = self.geo.version
         self.geo.version = self.election_dates[self.profile.title]["geo_version"]
+        comparative_geos = geo_data.get_comparative_geos(self.geo)
 
         table = get_datatable(self.election_dates[self.profile.title]["turnout"])
         results = table.get_stat_data(
@@ -119,7 +86,16 @@ class VpuuIndicator(BuildIndicator):
             "registered_voters",
             percent=False,
             year=self.election_dates[self.profile.title]["year"],
-        )[0]["registered_voters"]["values"]["this"]
+        )[0]["registered_voters"]
+
+        for comp_geo in comparative_geos:
+            comp_results = table.get_stat_data(
+                comp_geo,
+                "registered_voters",
+                percent=False,
+                year=self.election_dates[self.profile.title]["year"],
+            )[0]["registered_voters"]
+            results["values"][comp_geo.geo_level] = comp_results["values"]["this"]
 
         self.geo.version = current_version
         return results
@@ -127,6 +103,7 @@ class VpuuIndicator(BuildIndicator):
     def extra_headers(self):
         current_version = self.geo.version
         self.geo.version = self.election_dates[self.profile.title]["geo_version"]
+        comparative_geos = geo_data.get_comparative_geos(self.geo)
 
         table = get_datatable(self.election_dates[self.profile.title]["turnout"])
         results = table.get_stat_data(
@@ -135,7 +112,22 @@ class VpuuIndicator(BuildIndicator):
             percent=True,
             total="registered_voters",
             year=self.election_dates[self.profile.title]["year"],
-        )[0]["total_votes"]["values"]["this"]
+        )[0]["total_votes"]
+
+        for comp_geo in comparative_geos:
+            comp_results = table.get_stat_data(
+                comp_geo,
+                "total_votes",
+                percent=True,
+                total="registered_voters",
+                year=self.election_dates[self.profile.title]["year"],
+            )[0]["total_votes"]
+
+            results["values"][comp_geo.geo_level] = comp_results["values"]["this"]
+            results["numerators"][comp_geo.geo_level] = comp_results["numerators"][
+                "this"
+            ]
+
         self.geo.version = current_version
         return results
 
@@ -155,15 +147,23 @@ class VpuuIndicator(BuildIndicator):
         """
         head = super(VpuuIndicator, self).header()
         if self.profile.title == "Total Population":
-            head["value"] = self.calculate_age_median()
+            head["result"]["type"] = "number"
+            head["result"]["values"]["this"] = self.calculate_age_median()
         elif self.profile.profile.name == "Elections":
-            head["value"] = self.election_turnout()
-            head["extra_headers"] = {
-                "value": self.extra_headers(),
-                "summary": "Of registered voters cast their vote",
-            }
-        else:
-            head = head
+            head["result"]["type"] = "number"
+            head["result"]["values"] = self.election_turnout().get("values", {})
+            head["result"]["numerators"] = self.election_turnout().get("numerators", {})
+            extra = enhance_api_data(
+                {
+                    "type": "percent",
+                    "values": self.extra_headers()["values"],
+                    "numerators": self.extra_headers()["numerators"],
+                    "name": "Of registered voters cast their vote",
+                }
+            )
+            head["extra_results"].append(extra)
+        # pdb.set_trace()
+        head = enhance_api_data(head)
 
         return head
 
