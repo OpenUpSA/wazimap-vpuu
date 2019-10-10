@@ -73,10 +73,6 @@ def get_profile(geo, profile_name, request):
 
 def get_indicator_profile(geo, session):
 
-    # profiles = Section(geo, session)
-    # for profile in profiles.keys():
-    #     indicators =
-
     section = Section(geo, session)
     return section.build(BuildProfile, VpuuIndicator)
 

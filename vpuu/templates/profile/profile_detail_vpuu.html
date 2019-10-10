@@ -162,14 +162,12 @@
 			<div class="indicator__main">
 			    <div class="indicator__main__item">
 				<div class="indicator__value">
+				    
 				    <div class="indicator__value__number">
-					{% if indicator.result.type == 'text' %}
-					{{indicator.result.name}}
-					{% elif indicator.result.type == 'number' %}
-					{{indicator.result.values.this}}
-					{% elif indicator.result.type == 'percent' %}
-					{{indicator.result.values.this}}%
-					{% endif %}
+					{{indicator.result}}
+					{% include 'profile/_blocks/custom_stat_list.html' with stat=indicator.result stat_type=indicator.result.type %}
+					
+					
 				    </div>
 				    <div class="indicator__value__label">{{indicator.result.summary}}</div>
 				</div>

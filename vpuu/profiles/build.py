@@ -88,6 +88,7 @@ class VpuuIndicator(BuildIndicator):
             year=self.election_dates[self.profile.title]["year"],
         )[0]["registered_voters"]
 
+        results["numerators"] = {}
         for comp_geo in comparative_geos:
             comp_results = table.get_stat_data(
                 comp_geo,
@@ -96,6 +97,7 @@ class VpuuIndicator(BuildIndicator):
                 year=self.election_dates[self.profile.title]["year"],
             )[0]["registered_voters"]
             results["values"][comp_geo.geo_level] = comp_results["values"]["this"]
+            results["numerators"][comp_geo.geo_level] = None
 
         self.geo.version = current_version
         return results
@@ -146,9 +148,16 @@ class VpuuIndicator(BuildIndicator):
         Add calculation of the median age
         """
         head = super(VpuuIndicator, self).header()
+        del head["result"]["error"]
+        del head["result"]["numerator_errors"]
+        del head["result"]["error_ratio"]
+        del head["result"]["index"]
+        del head["result"]["numerators"]
+
         if self.profile.title == "Total Population":
             head["result"]["type"] = "number"
             head["result"]["values"]["this"] = self.calculate_age_median()
+            head["result"]["values"]["county"] = None
         elif self.profile.profile.name == "Elections":
             head["result"]["type"] = "number"
             head["result"]["values"] = self.election_turnout().get("values", {})
@@ -162,6 +171,7 @@ class VpuuIndicator(BuildIndicator):
                 }
             )
             head["extra_results"].append(extra)
+
         # pdb.set_trace()
         head = enhance_api_data(head)
 
