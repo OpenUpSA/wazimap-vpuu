@@ -36,6 +36,7 @@
     </div>
 </div>
 {% if WAZIMAP.comparative_levels|safe and stat.values.this and not stat_class == 'secondary' %}
+{% if not stat.type == 'name' %}
 <div class="indicator_content">
     {% for sumlev in  WAZIMAP.comparative_levels %}
     <div class="indicator__value_context">
@@ -43,5 +44,6 @@
     </div>
     {% endfor %}
 </div>
+{% endif %}
 {% endif %}
 {% endif %}
