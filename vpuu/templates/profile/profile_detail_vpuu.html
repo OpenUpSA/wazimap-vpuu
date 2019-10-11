@@ -161,32 +161,16 @@
 		    <div class="grid__module_col col_3 col_m_4 col_sm_12 flex">
 			<div class="indicator__main">
 			    <div class="indicator__main__item">
-				<div class="indicator__value">
-				    
-				    <div class="indicator__value__number">
-					{{indicator.result}}
-					{% include 'profile/_blocks/custom_stat_list.html' with stat=indicator.result stat_type=indicator.result.type %}
-					
-					
-				    </div>
-				    <div class="indicator__value__label">{{indicator.result.summary}}</div>
-				</div>
+				{% include 'profile/_blocks/custom_stat_list.html' with stat=indicator.result stat_type=indicator.result.type %}
 				<div class="indicator__context">
 				    <div class="indicator__value__context">{{indicator.info}}</div>
 				</div>
 			    </div>
-			    {% if indicator.extra_headers %}
+			    {% for result in indicator.extra_results %}
 			    <div class="indicator__main indicator__main__item indicator__main__value--last">
-				<div class="indicator__main__item">
-				    <div class="indicator__value">
-					<div class="indicator__value__number">
-					    {{indicator.extra_headers.value}}
-					</div>
-					<div class="indicator__value__label">{{indicator.extra_headers.summary}}</div>
-				    </div>
-				</div>
-			    </div>
-			    {% endif %}
+				{% include 'profile/_blocks/custom_stat_list.html' with stat=result stat_type=result.type %}
+						    </div>
+			    {% endfor %}
 			</div>
 		    </div>
 		    <div class="grid__module_col flex">

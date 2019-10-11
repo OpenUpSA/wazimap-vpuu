@@ -134,6 +134,8 @@ class VpuuIndicator(BuildIndicator):
         return results
 
     def calculate_age_median(self):
+        comparative_geos = geo_data.get_comparative_geos(self.geo)
+        result = {}
         if self.profile.title == "Total Population":
             age_table = get_datatable("ageincompletedyears")
             objects = sorted(
@@ -141,7 +143,17 @@ class VpuuIndicator(BuildIndicator):
                 key=lambda x: int(getattr(x, "age in completed years")),
             )
             median = calculate_median(objects, "age in completed years")
-            return median
+        result["values"] = {"this": median}
+
+        for comp_geo in comparative_geos:
+            objects = sorted(
+                age_table.get_rows_for_geo(comp_geo, self.session),
+                key=lambda x: int(getattr(x, "age in completed years")),
+            )
+            median = calculate_median(objects, "age in completed years")
+            result["values"][comp_geo.geo_level] = int(median)
+
+        return result
 
     def header(self):
         """
@@ -156,15 +168,16 @@ class VpuuIndicator(BuildIndicator):
 
         if self.profile.title == "Total Population":
             head["result"]["type"] = "number"
-            head["result"]["values"]["this"] = self.calculate_age_median()
-            head["result"]["values"]["county"] = None
+            head["result"]["values"] = self.calculate_age_median()["values"]
+            head["result"]["name"] = self.profile.summary
         elif self.profile.profile.name == "Elections":
+            head["result"]["name"] = self.profile.summary
             head["result"]["type"] = "number"
             head["result"]["values"] = self.election_turnout().get("values", {})
             head["result"]["numerators"] = self.election_turnout().get("numerators", {})
             extra = enhance_api_data(
                 {
-                    "type": "percent",
+                    "type": "percentage",
                     "values": self.extra_headers()["values"],
                     "numerators": self.extra_headers()["numerators"],
                     "name": "Of registered voters cast their vote",
