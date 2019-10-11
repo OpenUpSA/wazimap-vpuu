@@ -190,32 +190,8 @@ class VpuuIndicator(BuildIndicator):
 
         return head
 
-    def landcover(self):
-        with dataset_context(year="2014"):
-            try:
-                distribution, total = get_stat_data(
-                    [self.profile.field_name],
-                    self.geo,
-                    self.session,
-                    table_universe=self.profile.universe,
-                    table_dataset=self.profile.dataset,
-                    exclude_zero=self.profile.exclude_zero,
-                    percent=self.profile.percent,
-                    recode=self.profile.recode,
-                    key_order=self.profile.key_order,
-                    exclude=self.profile.exclude,
-                    order_by=self.profile.order_by,
-                )
-                group_remainder(distribution, self.profile.group_remainder)
-                self.distribution = distribution
-                return {"stat_values": distribution, "total": total}
-            except DataNotFound:
-                return {}
-
     def calculation(self):
-        if self.profile.title == "National Land Cover":
-            return self.landcover()
-        elif self.profile.profile.name == "Elections":
+        if self.profile.profile.name == "Elections":
             return self.elections()
         else:
             return super(VpuuIndicator, self).calculation()
