@@ -136,19 +136,19 @@
 		    <div class="sub-section-header__title">
 			<h3 class="sub-section__heading">{{indicator.title}}</h3>
 		    </div>
-		    <div class="sub-section-header__data-source">
-			<div data-delay="0" class="data-source__menu w-dropdown">
-			    <div class="data-source__menu_trigger w-dropdown-toggle">
-				<div class="data-source__menu_label">Community Survey 2016</div>
-				<img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3814f6ca62b6279bac981e_Expand-less.svg" alt="" class="data-source__menu_arrow">
-			    </div>
-			    <nav class="data-source__menu_list w-dropdown-list">
-				<a href="#" class="data-source__menu_item w-dropdown-link">ISSP</a>
-				<a href="#" class="data-source__menu_item w-dropdown-link">Community Survey 2016</a>
-				<a href="#" class="data-source__menu_item cc-last w-dropdown-link">Census 2011</a>
-			    </nav>
-			</div>
-		    </div>
+		    <!-- <div class="sub-section-header__data-source">
+			 <div data-delay="0" class="data-source__menu w-dropdown">
+			 <div class="data-source__menu_trigger w-dropdown-toggle">
+			 <div class="data-source__menu_label">Community Survey 2016</div>
+			 <img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3814f6ca62b6279bac981e_Expand-less.svg" alt="" class="data-source__menu_arrow">
+			 </div>
+			 <nav class="data-source__menu_list w-dropdown-list">
+			 <a href="#" class="data-source__menu_item w-dropdown-link">ISSP</a>
+			 <a href="#" class="data-source__menu_item w-dropdown-link">Community Survey 2016</a>
+			 <a href="#" class="data-source__menu_item cc-last w-dropdown-link">Census 2011</a>
+			 </nav>
+			 </div>
+			 </div> -->
 		</div>
             </div>
 	</div>
@@ -202,6 +202,7 @@
 					</div>
 				    </div>
 				</div>
+				{% if indicator.stat_values %}
 				<div class="chart__block">
 				    <div class="column-full" id="chart-{{indicator.chart_type}}-indicator-{{profile}}-{{forloop.counter0}}-stat_values" data-stat-type="scaled-percentage" style="border-left:none"></div>
 				</div>
@@ -211,7 +212,10 @@
 					<div class="data-source__icon"><img src="{% static 'images/arrow-up-circle-24px.svg' %}" width="16" height="16" alt=""></div>
 					<div class="data-source__label">Official</div>
 				    </div>
-				</div>
+												</div>
+				{% else %}
+				<p> No Data available </p>
+				{% endif %}
 			    </div>
 			    {% for child in indicator.children %}
 			    <div class="chart__container">
@@ -240,6 +244,7 @@
 					</div>
 				    </div>
 				</div>
+				{% if child.stat_values %}
 				<div class="chart__block">
 				    <div class="column-full" id="chart-{{child.chart_type}}-indicator-{{profile}}-{{forloop.parentloop.counter0}}-children-{{forloop.counter0}}-stat_values" data-stat-type="scaled-percentage" style="border-left:none"></div>
 				</div>
@@ -249,7 +254,10 @@
 					<div class="data-source__icon"><img src="{% static 'images/arrow-up-circle-24px.svg' %}" width="16" height="16" alt=""></div>
 					<div class="data-source__label">Official</div>
 				    </div>
-				</div>
+												</div>
+				{% else %}
+				<p>No Data Available</p>
+				{% endif %}
 			    </div>
 			    {% endfor %}
 			    {% else %}
@@ -292,7 +300,7 @@
 				</div>
 			    </div>
 			    {% else %}
-			    <p>No Data Avaliable</p>
+			    <p>No Data Available</p>
 			    {% endif %}
 			    {% endif %}
 			</div>
