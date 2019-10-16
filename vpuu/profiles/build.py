@@ -138,11 +138,15 @@ class VpuuIndicator(BuildIndicator):
         result = {}
         if self.profile.title == "Total Population":
             age_table = get_datatable("ageincompletedyears")
-            objects = sorted(
-                age_table.get_rows_for_geo(self.geo, self.session),
-                key=lambda x: int(getattr(x, "age in completed years")),
-            )
-            median = calculate_median(objects, "age in completed years")
+            try:
+
+                objects = sorted(
+                    age_table.get_rows_for_geo(self.geo, self.session),
+                    key=lambda x: int(getattr(x, "age in completed years")),
+                )
+                median = calculate_median(objects, "age in completed years")
+            except DataNotFound:
+                median = ""
         result["values"] = {"this": median}
 
         for comp_geo in comparative_geos:

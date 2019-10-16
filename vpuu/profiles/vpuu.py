@@ -7,6 +7,7 @@ from wazimap.data.utils import get_session, add_metadata
 from wazimap.geo import geo_data
 from dynamic_profile.models import IndicatorProfile, Profile
 from dynamic_profile.utils import merge_dicts, Section, BuildProfile, BuildIndicator
+from wazimap.models.data import DataNotFound
 
 from wazimap.data.utils import (
     collapse_categories,
@@ -74,8 +75,16 @@ def get_population_profile(geo, session):
     """
     Get population of geography
     """
-
-    _, total_pop = get_stat_data(
-        ["population group"], geo, session, table_dataset="Census and Community Survey"
-    )
-    return {"geography_population": total_pop, "density": total_pop / geo.square_kms}
+    try:
+        _, total_pop = get_stat_data(
+            ["population group"],
+            geo,
+            session,
+            table_dataset="Census and Community Survey",
+        )
+        return {
+            "geography_population": total_pop,
+            "density": total_pop / geo.square_kms,
+        }
+    except DataNotFound:
+        return {"geography_population": "N/A", "density": "N/A"}
