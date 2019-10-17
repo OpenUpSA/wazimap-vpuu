@@ -2,8 +2,7 @@ FROM ubuntu:18.04
 
 ENV PYTHONUNBUFFERED 1
 
-RUN apt-get update && apt install -y gdal-bin libgdal-dev
-RUN apt install -y python-pip git python3-pip
+RUN apt-get update && apt install -y gdal-bin libgdal-dev git python3-pip python3
 
 ENV CPLUS_INCLUDE_PATH /usr/include/gdal
 ENV C_INCLUDE_PATH /usr/include/gdal
