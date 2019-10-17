@@ -12,4 +12,4 @@ WORKDIR /vpuu
 
 COPY . /vpuu
 
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r docker-requirements.txt
