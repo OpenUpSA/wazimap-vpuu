@@ -57,6 +57,7 @@ WAZIMAP["primary_release_year"] = {
     "ward": 2011,
     "subplace": 2011,
     "smallarea": 2011,
+    "informalsettlement": 2011,
 }
 WAZIMAP["latest_release_year"] = "2016"
 WAZIMAP["primary_dataset_name"] = "Census and Community Survey"
@@ -67,6 +68,7 @@ WAZIMAP["available_release_years"] = {
     "ward": [2011],
     "subplace": [2011],
     "smallarea": [2011],
+    "informalsettlement": [2011],
 }
 
 WAZIMAP["levels"] = {
@@ -76,10 +78,14 @@ WAZIMAP["levels"] = {
     },
     "province": {"children": ["district", "municipality", "subplace", "ward"]},
     "district": {"children": ["municipality", "subplace", "ward"]},
-    "municipality": {"plural": "municipalities", "children": ["subplace"]},
+    "municipality": {
+        "plural": "municipalities",
+        "children": ["subplace", "informalsettlement", "ward"],
+    },
     "subplace": {"children": ["smallarea"]},
     "ward": {"children": []},
     "smallarea": {"children": []},
+    "informalsettlement": {"children": []},
 }
 
 WAZIMAP["mapit"] = {"generations": {"2011": "1", "2016": "2", None: "1"}}
