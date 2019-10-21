@@ -21,6 +21,7 @@ SETTINGS.setdefault(
 SETTINGS.setdefault(
     "level_codes",
     {
+        "informalsettlement": "IS",
         "smallarea": "SMA",
         "subplace": "SP",
         "ward": "WD",
@@ -32,7 +33,15 @@ SETTINGS.setdefault(
 )
 SETTINGS.setdefault(
     "level_simplify",
-    {"DC": 0.01, "PR": 0.005, "MN": 0.005, "WD": 0.0001, "SP": 0.005, "SMA": 0.0001},
+    {
+        "DC": 0.01,
+        "PR": 0.005,
+        "MN": 0.005,
+        "WD": 0.0001,
+        "SP": 0.005,
+        "SMA": 0.0001,
+        "IS": 0.00001,
+    },
 )
 
 
