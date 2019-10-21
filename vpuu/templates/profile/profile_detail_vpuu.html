@@ -136,19 +136,6 @@
 		    <div class="sub-section-header__title">
 			<h3 class="sub-section__heading">{{indicator.title}}</h3>
 		    </div>
-		    <!-- <div class="sub-section-header__data-source">
-			 <div data-delay="0" class="data-source__menu w-dropdown">
-			 <div class="data-source__menu_trigger w-dropdown-toggle">
-			 <div class="data-source__menu_label">Community Survey 2016</div>
-			 <img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3814f6ca62b6279bac981e_Expand-less.svg" alt="" class="data-source__menu_arrow">
-			 </div>
-			 <nav class="data-source__menu_list w-dropdown-list">
-			 <a href="#" class="data-source__menu_item w-dropdown-link">ISSP</a>
-			 <a href="#" class="data-source__menu_item w-dropdown-link">Community Survey 2016</a>
-			 <a href="#" class="data-source__menu_item cc-last w-dropdown-link">Census 2011</a>
-			 </nav>
-			 </div>
-			 </div> -->
 		</div>
             </div>
 	</div>
@@ -166,11 +153,11 @@
 				    <div class="indicator__value__context">{{indicator.info}}</div>
 				</div>
 			    </div>
-			    {% for result in indicator.extra_results %}
-			    <div class="indicator__main indicator__main__item indicator__main__value--last">
-				{% include 'profile/_blocks/custom_stat_list.html' with stat=result stat_type=result.type %}
-			    </div>
-			    {% endfor %}
+			    <!-- {% for result in indicator.extra_results %}
+				 <div class="indicator__main indicator__main__item indicator__main__value--last">
+				 {% include 'profile/_blocks/custom_stat_list.html' with stat=result stat_type=result.type %}
+				 </div>
+				 {% endfor %} -->
 						    
 			</div>
 		    </div>
