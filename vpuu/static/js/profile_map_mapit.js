@@ -58,7 +58,11 @@ ProfileMaps = function() {
 	    GeometryLoader.wardLayers(geo_code, geo_level, geo_version,function(geojson){
 		var layer = self.drawGeoFeatures(geojson);
 		overlayMap['Ward'] = layer;
+		GeometryLoader.informalSettlementLayers(geo_code, geo_level, geo_version,function(geojson){
+		var layer = self.drawGeoFeatures(geojson);
+		overlayMap['Informal Settlement'] = layer;
 		fn(overlayMap);
+	    });
 	    });
 	});
 	

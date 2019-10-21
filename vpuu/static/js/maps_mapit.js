@@ -120,6 +120,20 @@ function MapItGeometryLoader() {
 	    success(geojson);
 	});
     };
+    this.informalSettlementLayers = function(geo_code,geo_level, geo_version,success){
+	var mapit_type = MAPIT.level_codes[geo_level];
+        var mapit_simplify = MAPIT.level_simplify[mapit_type];
+        var generation = MAPIT.generations[geo_version];
+	
+	var ward_url = '/areas/MDB-levels:' +mapit_type +'-' + geo_code +'|IS' +
+	    '.geojson?generation='+ generation +"&simplify_tolerance=" + mapit_simplify;
+
+	d3.json(this.mapit_url + ward_url, function(geojson){
+	    var features = _.values(geojson.features);
+            _.each(features, self.decorateFeature);
+	    success(geojson);
+	});
+    };
 
 
 
