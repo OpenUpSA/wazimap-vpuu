@@ -33,7 +33,7 @@ MIDDLEWARE = [
 
 
 DATABASE_URL = os.environ.get(
-    "DATABASE_URL", "postgresql://wazimap_vpuu:wazimap_vpuu@development/wazimap_vpuu"
+    "DATABASE_URL", "postgresql://wazimap_vpuu:wazimap_vpuu@db/wazimap_vpuu"
 )
 
 DATABASES["default"] = dj_database_url.parse(DATABASE_URL)
