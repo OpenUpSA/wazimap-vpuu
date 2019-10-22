@@ -4,8 +4,6 @@
 
 1. Run Docker-Compose
 
-Before running ```docker-compose``` unzip the census.zip file in the sql directory.
-
 ```
 docker-compose up
 ```
