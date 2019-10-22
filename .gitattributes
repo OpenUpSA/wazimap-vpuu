@@ -1,1 +1,2 @@
 sql/census.zip filter=lfs diff=lfs merge=lfs -text
+fixtures/census/wazimap_django_models.json filter=lfs diff=lfs merge=lfs -text
