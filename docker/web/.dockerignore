@@ -1,2 +1,5 @@
-.git/
+bin/
 sql/
+env2/
+env3/
+webflow/
