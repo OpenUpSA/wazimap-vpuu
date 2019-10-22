@@ -7,4 +7,6 @@ EOSQL
 
 cd /docker-entrypoint-initdb.d/
 
+unzip census.zip
+
 cat census/*.sql | psql -U postgres -d postgres

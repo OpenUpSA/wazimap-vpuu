@@ -17,7 +17,9 @@ Once the import is complete, shut down docker-compose then bring it up again.
 
 2. We now have to add some fixtures
 ```
-docker exec -it wazimap-vpuu python3 manage.py loaddata fixtures/census/wazimap_django_models.json
+docker exec -it wazimap-vpuu python manage.py loaddata fixtures/census/wazimap_django_models.json
+docker exec -it wazimap-vpuu python manage.py loaddata fixtures/dynamic_profile.json
+
 ```
 
 3. Add admin user
