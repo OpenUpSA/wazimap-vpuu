@@ -2483,8 +2483,8 @@ Webflow.define('dropdown', module.exports = function ($, _) {
     }
 
     if (!toggleId) {
-      listId = 'w-dropdown-toggle-' + i;
-      data.list.attr('id', listId);
+      toggleId = 'w-dropdown-toggle-' + i;
+      data.toggle.attr('id', toggleId);
     }
 
     data.toggle.attr('aria-controls', listId);
