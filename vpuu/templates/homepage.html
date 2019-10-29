@@ -1,24 +1,138 @@
-{% extends 'homepage.html' %}{% load staticfiles %}
+{% extends '_base.html' %}
+{% load staticfiles %}
 
-{% block head_title %}
-    {{ block.super }}
-{% endblock %}
-
-{% block head_meta_description %}
-    {{ block.super }}
-{% endblock %}
-
-{% block place_finder %}
-  {{block.super}}
-{% endblock %}
-
-{% block homepage_detail %}
-  {{block.super}}
-{% endblock %}
-
-{% block homepage_javascripb_libs %}
-{{ block.super }}
+{% block content_container %}
 <script src="{% static 'js/maps_mapit.js' %}"></script>
-
+<div class="site-banner hidden">
+    <div class="grid__module_container">
+	<div class="grid__module_row">
+            <div class="grid__module_col">
+		<div class="site-banner__content">
+		    <div class="site-banner__title">Wazimap now uses data from the Community Survey 2016 where possible</div>
+		    <a href="#" class="nav-button nav-button--light w-inline-block">
+			<div>Learn more</div>
+		    </a>
+		</div>
+            </div>
+	</div>
+    </div>
+</div>
+<section id="home-hero" class="hero-section">
+    <div class="grid__module_container--more-padding">
+	<div class="hero-section__header">
+            <div class="grid__module_row--more-padding">
+		<div class="grid__module_col--more-padding">
+		    <h1 class="hero-section__title">Discover stories hidden in South African Data</h1>
+		    <div class="herp-section__subheading">Select a province or search for a location to begin</div>
+		    <div class="hero-search">
+			<div class="hero-section__icon">
+			    <img src="images/search-24px.svg" width="32" height="32" alt="">
+			</div>
+			<input type="text" maxlength="256" name="geography-select" data-name="Location Search" placeholder="Search for a location..." class="hero-section__field w-input" id="geography-select">
+			<div class="hero-search__button">
+			    <a href="profile-page.html" class="button button--large button--hover w-inline-block">
+				<img src="{% static 'images/search-white-24px.svg' %}" alt="" class="button__icon">
+				<div class="button__label">Search</div></a></div>
+		    </div>
+		</div>
+            </div>
+	</div>
+    </div>
+    <div id="home-map" class="map__embed w-embed w-iframe">
+	<iframe id="slippy-map" width="100%" height="" scrollwheel="false" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=1.5051269531250002%2C-34.651285198954135%2C26.883544921875004%2C-22.39071391683855&amp;layer=mapnik" style="float:left">
+	</iframe>
+    </div>
+</section>
+<div class="hero-info">
+    <div class="grid__module_container--more-padding">
+	<div class="grid__module_row--more-padding">
+            <div class="grid__module_col--more-padding">
+		<div class="hero-info__buttons">
+		    <a href="#home-about" class="button w-inline-block">
+			<div class="button__label">About this project</div>
+		    </a>
+		</div>
+            </div>
+	</div>
+    </div>
+</div>
+<section id="home-about" class="about-section">
+    <div class="grid__module_container--more-padding">
+	<div class="grid__module_row--more-padding row--align-start">
+            <div class="grid__module_col--more-padding col_6 col_sm_12">
+		<div class="about-section__image">
+		    <div class="about-image__image"></div>
+		    <div class="about-image__block"></div>
+		</div>
+            </div>
+            <div class="grid__module_col--more-padding col_6 col_sm_12">
+		<div class="about-section__copy">
+		    <div class="home-section__header">
+			<h2 class="home-section__title">data for informing change</h2>
+		    </div>
+		    <div class="about-section__body">
+			<p class="paragraph">The Community Atlas empowers residents, community stakeholders, municipal officials, NGOs and other interested parties to better understand the people and their needs in order to plan for these communities and advocate for better service delivery using an evidence-driven approach.</p>
+		    </div>
+		    <div class="button__container">
+			<a href="about.html" class="button button--secondary w-inline-block">
+			    <div class="button__label">Learn more</div>
+			</a>
+		    </div>
+		</div>
+            </div>
+	</div>
+    </div>
+</section>
+<section id="visualizations" class="featured-stories home-section hidden">
+    <div class="grid__module_container">
+	<div class="home-section__header">
+            <h2 class="home-section__title">Featured Visualizations</h2>
+            <div class="home-section__description">Created using data from Wazimap</div>
+	</div>
+	<div class="card-layout w-dyn-list">
+            <div class="grid__module_row w-dyn-items">
+		<div class="grid__module_col w-dyn-item">
+		    <div class="card__plate card__plate--hover">
+			<div class="image__card image__card--full">
+			    <a href="#" class="link__category link__category--card-full w-inline-block">
+				<div></div>
+			    </a>
+			    <a href="#" class="card__title-bg w-inline-block">
+				<h3 class="card-layout__title card-layout__title--full"></h3>
+				<div class="card-layout__author"></div>
+			    </a>
+			</div>
+		    </div>
+		</div>
+            </div>
+            <div class="w-dyn-empty">
+		<div>No items found.</div>
+            </div>
+	</div>
+	<div class="home-section__footer justify-right">
+            <div class="button__container">
+		<a href="#" class="button button--secondary w-inline-block">
+		    <div class="button__label">More visualizations</div>
+		</a>
+            </div>
+	</div>
+    </div>
+</section>
+<section id="contributors" class="contributors home-section hidden">
+    <div class="grid__module_container">
+	<div class="home-section__header justify-center">
+            <h2 class="home-section__title">Data contributors</h2>
+            <div class="home-section__description">Our partners for a more transparent South Africa</div>
+	</div>
+	<div class="contributors-list w-dyn-list">
+            <div class="grid__module_row row--justify-center w-dyn-items">
+		<div class="grid__module_col col_2 w-dyn-item"><a href="#" class="link-block w-inline-block"><img src="" alt=""></a></div>
+            </div>
+            <div class="w-dyn-empty">
+		<div>No items found.</div>
+            </div>
+	</div>
+	<div class="home-section__footer justify-center"><a href="#" class="button w-inline-block"><img src="images/thumbs-up-white-24px.svg" alt="" class="button__icon"><div class="button__label">Become a contributor</div></a></div>
+    </div>
+</section>
 {% endblock %}
-
