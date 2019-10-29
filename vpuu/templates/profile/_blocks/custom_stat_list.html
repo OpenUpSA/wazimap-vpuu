@@ -36,16 +36,17 @@
     </div>
 </div>
 {% if WAZIMAP.comparative_levels|safe and stat.values.this and not stat_class == 'secondary' %}
-    {% if geography.parents %}
-    {% if not stat.type == 'name' %}
-        <div class="indicator_content">
-        {% for sumlev in  WAZIMAP.comparative_levels %}
-            <div class="indicator__value_context">
-	        {% build_comparative_item sumlev stat stat_type geography decimals %}
-           </div>
-       {% endfor %}
-       </div>
-    {% endif %}
-    {% endif %}       
+{% if geography.parents %}
+{% if stat.summary == 'Residential Land Cover' or stat.summary == 'Informal Land Cover' %}
+{% else %}
+<div class="indicator_content">
+    {% for sumlev in  WAZIMAP.comparative_levels %}
+    <div class="indicator__value_context">
+	{% build_comparative_item sumlev stat stat_type geography decimals %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endif %}       
 {% endif %}
 {% endif %}
