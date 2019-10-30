@@ -175,7 +175,7 @@
      }).addTo(map);
      
      // add province boundaries
-     d3.json("http://mapit.code4sa.org/areas/PR.geojson?generation=1&simplify_tolerance=" + 0.005, function(error, geojson) {
+     d3.json("https://mapit.code4sa.org/areas/PR.geojson?generation=1&simplify_tolerance=" + 0.005, function(error, geojson) {
          if (!geojson)
              return;
 
