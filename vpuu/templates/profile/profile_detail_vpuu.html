@@ -87,6 +87,19 @@
 		</a>
 		{% endfor %}
 	    </div>
+	    <div data-delay="0" class="data-source__menu w-dropdown">
+		<div class="data-source__menu_trigger w-dropdown-toggle">
+		    <div class="data-source__menu_label">{{ primary_releases.active.name }} {{ primary_releases.active.year }}</div>
+		    <img src="https://uploads-ssl.webflow.com/5d3698450ec6033a9ae18ab8/5d3814f6ca62b6279bac981e_Expand-less.svg" alt="" class="data-source__menu_arrow">
+		</div>
+		<nav class="data-source__menu_list w-dropdown-list">
+		    {% if primary_releases.other %}
+		    {% for release in primary_releases.other %}
+		    <a href="{{ request.path }}?release={{release.year}}" class="data-source__menu_item w-dropdown-link">{{ release.name }} {{ release.year }}</a>
+		    {% endfor %}
+		    {% endif %}
+		</nav>
+            </div>
 	</div>
     </div>
 </div>
@@ -132,12 +145,12 @@
 	<section id="{{indicator.title}}" data-scroll-time="1.25" class="sub-section-block__scroll"></section>
 	<div class="sub-section-header">
 	    <div class="grid__module_container">
-		<div class="sub-section-header__plate">
-		    <div class="sub-section-header__title">
-			<h3 class="sub-section__heading">{{indicator.title}}</h3>
+				<div class="sub-section-header__plate">
+				<div class="sub-section-header__title">
+					<h3 class="sub-section__heading">{{indicator.title}}</h3>
 		    </div>
 		</div>
-            </div>
+	    </div>
 	</div>
 	<div class="sub-section__data-source">
 	    <div class="grid__module_container"></div>
