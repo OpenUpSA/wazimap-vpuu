@@ -32,6 +32,20 @@
  });
 </script>
 
+<script defer>
+ $('.chart-show-embed').on('click', function(event){
+     table_id = event.target.id;
+     for(let i=0; i<= Object.keys(Charts).length; i++){
+	 if(Charts[i].tableID == table_id){
+	     Charts[i].showEmbedCode();
+	     break
+	 }
+     }
+ });
+</script>
+
+
+
 {% if head2head %}
 <script type="text/javascript">
   var releaseLinks = $('.release-list').find('li a');
