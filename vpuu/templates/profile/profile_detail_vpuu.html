@@ -127,7 +127,7 @@
 		<div class="section-header__share">
 		    <a href="#" class="nav-button nav-button--small nav-button--light w-inline-block">
 			<img src="{% static 'images/share-white-24px.svg' %}" width="20" height="20" alt="">
-			<div class="nav-button__label hide-xs">share</div>
+			<!-- <div class="nav-button__label hide-xs">share</div> -->
 		    </a>
 		</div>
             </div>
@@ -180,9 +180,6 @@
 				{% endif %}
 				<div class="indicator__main__item">
 				{% include 'profile/_blocks/custom_stat_list.html' with stat=indicator.result stat_type=indicator.result.type %}
-				<div class="indicator__context">
-				    <div class="indicator__value__context">{{indicator.info}}</div>
-				</div>
 			    </div>
 			    <!-- {% for result in indicator.extra_results %}
 				 <div class="indicator__main indicator__main__item indicator__main__value--last">
