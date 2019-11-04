@@ -2330,7 +2330,7 @@ a {
   flex: 1;
 }
 
-@media (max-width: 991px) {
+@media only screen and (max-width: 991px) {
   .grid__module_container {
     max-width: 100%;
   }
