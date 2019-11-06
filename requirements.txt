@@ -4,7 +4,7 @@ django-appconf==1.0.2
 django-test-without-migrations==0.4
 django-wkhtmltopdf==3.2.0
 djangorestframework==3.9.2
-GDAL==2.2.3
+GDAL==1.10
 geojson==2.4.1
 gevent==1.4.0
 greenlet==0.4.15
