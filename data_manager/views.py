@@ -9,14 +9,8 @@ from django import forms
 from django.contrib.admin import widgets
 from django.contrib.messages import api as messages_api
 from django.contrib.admin.views.decorators import staff_member_required
-from django.http import FileResponse
-import io
 
-import pdfkit
-from wkhtmltopdf.views import PDFResponse
-from wkhtmltopdf.utils import wkhtmltopdf
 from wazimap.models import FieldTable
-from wazimap.views import GeographyDetailView
 from .dataset_upload import UploadedDataSet
 
 log = logging.getLogger(__name__)
@@ -53,16 +47,7 @@ def add_dataset(request):
         {"model_name": "Field table", "form": form},
     )
 
+
 def handle_uploaded_dataset(f, field_table):
     uploaded_dataset = UploadedDataSet(f, field_table)
     uploaded_dataset.insert_data()
-
-class GeographyPDFView(GeographyDetailView):
-    def get(self, request, *args, **kwargs):
-        # render as pdf
-        url = '/profiles/%s-%s-%s' % (self.geo_level, self.geo_code, self.geo.slug)
-        url = request.build_absolute_uri(url)
-        pdf = wkhtmltopdf(url, zoom=0.7)
-        filename = '%s-%s-%s.pdf' % (self.geo_level, self.geo_code, self.geo.slug)
-
-        return PDFResponse(pdf, filename=filename)

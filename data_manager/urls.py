@@ -14,24 +14,11 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url
-from django.conf import settings
 from django.contrib import admin
 from django.views.generic.base import TemplateView
-from django.views.decorators.cache import cache_page
 from . import views
-from wkhtmltopdf.views import PDFTemplateView
-
-
-STANDARD_CACHE_TIME = settings.WAZIMAP['cache_secs']
-GEOGRAPHY_LEVELS = '|'.join(settings.WAZIMAP['levels'].keys())
-PROFILES_GEOGRAPHY_REGEX = r'profiles/(?P<geography_id>[{}]+-\w+)(-(?P<slug>[\w-]+))?\.pdf'.format(GEOGRAPHY_LEVELS)
 
 app_name = "data_manager"
 urlpatterns = [
-    url(r"^admin/data_manager/data_upload/$", views.add_dataset),
-    # url(
-    #     regex   = '^{}/$'.format(PROFILES_GEOGRAPHY_REGEX),
-    #     view    = cache_page(STANDARD_CACHE_TIME)(views.GeographyPDFView.as_view()),
-    #     name    = "profile_pdf",
-    # ),
+    url(r'^admin/data_manager/data_upload/$', views.add_dataset), 
 ]
