@@ -4429,7 +4429,7 @@ button.action-button {
   .section-header__share {
     display: none !important; }
   #page-footer {
-    display: none; }
+    display: none !important; }
   .indicator__chart__links {
     display: none !important; }
   .data-section {
@@ -4439,7 +4439,8 @@ button.action-button {
   .sub-section {
     margin-bottom: 0;
     padding-top: 5px !important;
-    padding-bottom: 0 !important; }
+    padding-bottom: 0 !important;
+    page-break-after: always; }
   .sub-section__footnote {
     padding: 10px !important; }
   .sub-section__indicator {
@@ -4449,7 +4450,7 @@ button.action-button {
     page-break-inside: avoid; }
   .chart__block {
     margin: 5px !important; }
-  .location-meta {
-    display: none; }
   .charts_container {
-    display: block !important; } }
+    display: block !important; }
+  .chart.pie-chart {
+    transform: scale(1.3); } }

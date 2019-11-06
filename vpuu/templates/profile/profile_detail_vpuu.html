@@ -3,6 +3,13 @@
 {% block head_meta_description %}Population data and election figures from {{ geography.this.short_name}}, broken down by category: Demographics, Service delivery, Economics and Education.{% endblock %}
 
 {% block header_content %}
+<a 
+  href="/profiles/{{ geography.this.geo_level }}-{{ geography.this.geo_code }}-{{ geography.this.short_name|slugify }}.pdf" target="_blank"
+  class="page-options w-inline-block">
+  <img 
+  src="{% static 'images/download-white-24px.svg' %}"
+  alt="" class="icon--medium">
+</a>
 <div class="location-meta">
     <div class="grid__module_container">
 	<div class="location-meta__inner">
@@ -41,7 +48,7 @@
 <div class="location-nav">
     <div class="grid__module_container">
 	<div class="location-nav__inner">
-            <div class="location-nav__crumbs"><a href="#" class="nav-button location-nav__link__more show-xs w-inline-block"><img src="images/more-horiz-24px.svg" alt=""></a>
+            <div class="location-nav__crumbs"><a href="#" class="nav-button location-nav__link__more show-xs w-inline-block"><img src="{% static 'images/more-horiz-24px.svg' %}" alt=""></a>
 		{% if geography.parents %}
 		{% for level,g in geography.parents.items  reversed %}
 		<a href="/profiles/{{ g.full_geoid }}-{{ g.short_name|slugify }}/" class="nav-button hide-xs w-inline-block">
@@ -59,11 +66,11 @@
 		    <input id="geography-select" type="text" maxlength="256" name="Location-Search" data-name="Location Search" placeholder="Find another location..." class="location-search__field w-input">
 	    </div>
 	</div>
-    </div>
+  </div>
 </div>
 <div id="cover-map" class="clearfix">
-    <div id="slippy-map"></div>
-    <div id="cover-profile" class="wrapper">
+  <div id="slippy-map"></div>
+  <div id="cover-profile" class="wrapper">
     </div>
 </div>
 {% endblock %}
