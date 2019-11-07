@@ -2984,6 +2984,7 @@ a {
   align-items: stretch;
 }
 
+
 .data-nav__source {
   display: -webkit-box;
   display: -webkit-flex;
@@ -3400,9 +3401,11 @@ a {
   .hero-section__subheading-2 {
     font-size: 16px;
   }
+
   .chart__container--half-width {
     padding: 8px;
   }
+
   .icon--medium {
     width: 20px;
     height: 20px;

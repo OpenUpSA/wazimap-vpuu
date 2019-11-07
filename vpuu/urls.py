@@ -15,9 +15,27 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.conf import settings
+from django.views.decorators.cache import cache_page
 from wazimap import urls
 from data_manager import urls as data_manager_urls
+from .profiles import views
 
-urlpatterns = data_manager_urls.urlpatterns + [url(r"^admin/", admin.site.urls)]
+from wkhtmltopdf.views import PDFTemplateView
+
+STANDARD_CACHE_TIME = settings.WAZIMAP["cache_secs"]
+GEOGRAPHY_LEVELS = "|".join(settings.WAZIMAP["levels"].keys())
+PROFILES_GEOGRAPHY_REGEX = r"profiles/(?P<geography_id>[{}]+-\w+)(-(?P<slug>[\w-]+))?\.pdf".format(
+    GEOGRAPHY_LEVELS
+)
+
+urlpatterns = data_manager_urls.urlpatterns + [
+    url(r"^admin/", admin.site.urls),
+    url(
+        regex="^{}/$".format(PROFILES_GEOGRAPHY_REGEX),
+        view=cache_page(STANDARD_CACHE_TIME)(views.ProfilePDFView.as_view()),
+        name="profile_pdf",
+    ),
+]
 
 urlpatterns += urls.urlpatterns

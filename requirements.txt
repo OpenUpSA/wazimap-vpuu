@@ -2,6 +2,7 @@ certifi==2018.11.29
 chardet==3.0.4
 django-appconf==1.0.2
 django-test-without-migrations==0.4
+django-wkhtmltopdf==3.2.0
 djangorestframework==3.9.2
 GDAL==1.10
 geojson==2.4.1

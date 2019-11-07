@@ -2,7 +2,7 @@ FROM python:3.6
 
 ENV PYTHONUNBUFFERED 1
 
-RUN apt update && apt install -y gdal-bin libgdal-dev git locales 
+RUN apt update && apt install -y gdal-bin libgdal-dev git locales wkhtmltopdf
 
 ENV CPLUS_INCLUDE_PATH /usr/include/gdal 
 ENV C_INCLUDE_PATH /usr/include/gdal
