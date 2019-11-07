@@ -17,6 +17,6 @@ rcssmin==1.0.6
 rjsmin==1.0.12
 Shapely==1.6.4.post2
 six==1.12.0
-urllib3==1.24.1
+urllib3==1.24.2
 git+https://github.com/OpenUpSA/wazimap.git@upgrade-django#egg=wazimap[gdal]
 git+https://github.com/OpenUpSA/wazimap-dynamic-profile.git@master#egg=dynamic-profile
