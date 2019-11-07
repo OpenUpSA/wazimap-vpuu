@@ -19,7 +19,6 @@ INSTALLED_APPS = [
     "vpuu",
     "dynamic_profile",
     "django.contrib.postgres",
-    "wkhtmltopdf",
 ] + INSTALLED_APPS
 
 
