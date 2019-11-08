@@ -5,16 +5,43 @@ from wazimap.data.utils import (
     dataset_context,
     get_stat_data,
     group_remainder,
+    merge_dicts,
 )
 from wazimap.models.data import DataNotFound
 from wazimap.geo import geo_data
-import pdb
 
 
 class VpuuIndicator(BuildIndicator):
     """
     Add some custom changes for vpuu.
     """
+
+    def election_comparative(self, comp_geo, year):
+        with dataset_context(year=year):
+            party_data, total_valid_votes = get_stat_data(
+                ["party"],
+                comp_geo,
+                self.session,
+                table_name=self.profile.table_name.name,
+                exclude_zero=self.profile.exclude_zero,
+                percent=self.profile.percent,
+                recode=self.profile.recode,
+                key_order=self.profile.key_order,
+                exclude=self.profile.exclude,
+                order_by=self.profile.order_by,
+            )
+            return party_data
+
+    def elections_geo_compare(self, data, year, version):
+        comparative_geos = geo_data.get_comparative_geos(self.geo)
+        for comp_geo in comparative_geos:
+            comp_geo.version = version
+            try:
+                merge_dicts(
+                    data, self.election_comparative(comp_geo, year), comp_geo.geo_level
+                )
+            except KeyError:
+                raise
 
     def __init__(self, *args, **kwargs):
         super(VpuuIndicator, self).__init__(*args, **kwargs)
@@ -61,6 +88,11 @@ class VpuuIndicator(BuildIndicator):
                     key_order=self.profile.key_order,
                     exclude=self.profile.exclude,
                     order_by=self.profile.order_by,
+                )
+                self.elections_geo_compare(
+                    party_data,
+                    self.election_dates[self.profile.title]["year"],
+                    self.election_dates[self.profile.title]["geo_version"],
                 )
                 group_remainder(party_data, self.profile.group_remainder)
                 self.geo.version = current_version
