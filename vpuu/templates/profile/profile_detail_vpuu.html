@@ -93,6 +93,12 @@
  .column-full, .column-half, .column-third{
      margin: 2% 0 0;
  }
+ .indicator__value__number span {
+     display:none;
+ }
+ .indicator__value__number:hover span{
+     display: block;
+ }
 </style>
 <div class="data-nav">
     <div class="grid__module_container">
@@ -181,6 +187,13 @@
 		<div class="grid__module_row">
 		    <div class="grid__module_col col_3 col_m_4 col_sm_12 flex">
 			<div class="indicator__main">
+			    {% if indicator.chart_title == 'Voters by party' %}
+			    {% for headers in indicator.extra_results %}
+			    <div class="indicator__main__item">
+				{% include 'profile/_blocks/custom_stat_list.html' with stat=headers stat_type='percentage' %}
+			    </div>
+			    {% endfor %}
+			    {% endif %}
 			    {% if indicator.title == 'Total Population' %}
 			    <div class="indicator__main__item">
 				<div class="indicator__value">
