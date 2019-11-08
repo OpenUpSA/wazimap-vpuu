@@ -2801,7 +2801,9 @@ h3.item-chosen-title {
   line-height: 1;
   font-size: 1em;
   margin-bottom: 0;
-  padding-right: 1.5em; }
+  padding-right: 1.5em;
+  margin-top: 2px;
+}
 
 .filter-group .filter-list {
   display: none;
