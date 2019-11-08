@@ -87,3 +87,6 @@ footer {
 
 .page-options {
   display: none !important; }
+
+bar .area, .column .area {
+  box-shadow: inset 0 0 0 1000px teal; }
