@@ -99,6 +99,12 @@
  .indicator__value__number:hover span{
      display: block;
  }
+ .indicator__value_context span{
+     display:none;
+ }
+ indicator__value_context:hover span{
+     display:block;
+ }
 </style>
 <div class="data-nav">
     <div class="grid__module_container">
@@ -190,7 +196,7 @@
 			    {% if indicator.chart_title == 'Voters by party' %}
 			    {% for headers in indicator.extra_results %}
 			    <div class="indicator__main__item">
-				{% include 'profile/_blocks/custom_stat_list.html' with stat=headers stat_type='percentage' %}
+				{% include 'profile/_blocks/custom_stat_list.html' with stat=headers.stat_data stat_type='percentage' %}
 			    </div>
 			    {% endfor %}
 			    {% endif %}
@@ -207,7 +213,7 @@
 			    </div>
 			    {% endif %}
 			    <div class="indicator__main__item">
-				{% include 'profile/_blocks/custom_stat_list.html' with stat=indicator.result stat_type=indicator.result.type %}
+				{% include 'profile/_blocks/custom_stat_list.html' with stat=indicator.result.stat_data stat_type=indicator.result.type %}
 			    </div>
 
 			</div>
