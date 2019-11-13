@@ -162,6 +162,7 @@ class VpuuIndicator(BuildIndicator):
             ]
 
         self.geo.version = current_version
+        results["name"] = "Of registered voters cast their vote"
         return results
 
     def calculate_age_median(self):
@@ -195,32 +196,24 @@ class VpuuIndicator(BuildIndicator):
         Add calculation of the median age
         """
         head = super(VpuuIndicator, self).header()
-        del head["result"]["error"]
-        del head["result"]["numerator_errors"]
-        del head["result"]["error_ratio"]
-        del head["result"]["index"]
-        del head["result"]["numerators"]
 
         if self.profile.title == "Total Population":
             head["result"]["type"] = "number"
-            head["result"]["values"] = self.calculate_age_median()["values"]
             head["result"]["name"] = self.profile.summary
+            head["result"]["summary"] = self.profile.summary
+            head["result"]["stat_data"] = self.calculate_age_median()
+            head["result"]["stat_data"]["name"] = self.profile.summary
+            head["result"]["stat_data"]["summary"] = self.profile.summary
+            head["result"]["stat_data"]["type"] = "number"
         elif self.profile.profile.name == "Elections":
             head["result"]["name"] = self.profile.summary
             head["result"]["type"] = "number"
-            head["result"]["values"] = self.election_turnout().get("values", {})
-            head["result"]["numerators"] = self.election_turnout().get("numerators", {})
+            head["result"]["stat_data"] = self.election_turnout()
             extra = enhance_api_data(
-                {
-                    "type": "percentage",
-                    "values": self.extra_headers()["values"],
-                    "numerators": self.extra_headers()["numerators"],
-                    "name": "Of registered voters cast their vote",
-                }
+                {"type": "percentage", "stat_data": self.extra_headers()}
             )
             head["extra_results"].append(extra)
 
-        # pdb.set_trace()
         head = enhance_api_data(head)
 
         return head
