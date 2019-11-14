@@ -133,3 +133,6 @@ TEMPLATES = [
         },
     }
 ]
+
+
+WKHTMLTOPDF_CMD_OPTIONS = {"print-media-type": True, "encoding": "utf8"}
