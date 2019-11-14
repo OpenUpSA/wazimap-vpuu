@@ -38,9 +38,12 @@ ProfileMaps = function() {
         //Get the children geo shapefiles for muni level
         if (geo.this.child_level) {
 	    if (geo_level == 'municipality'){
-		drawControl(geo_code, geo_level, geo_version).then(function(result){
-		    console.log(result);
-		});
+		if (!window.matchMedia('print').matches){
+		    drawControl(geo_code, geo_level, geo_version).then(function(result){
+			console.log(result);
+		    });
+		};
+		       
 		
 	    }else{
 		self.drawSurroundingFeatures(geo.this.child_level, geo_level, geo_code, geo_version);
