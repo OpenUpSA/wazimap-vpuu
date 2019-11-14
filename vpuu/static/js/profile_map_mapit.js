@@ -35,12 +35,11 @@ ProfileMaps = function() {
           self.drawSurroundingFeatures(parents[i], parents[i+1], null, geo_version);
         }
 
-        // children
+        //Get the children geo shapefiles for muni level
         if (geo.this.child_level) {
 	    if (geo_level == 'municipality'){
-		self.drawControl(geo_code,geo_level, geo_version, function(overlayMap){
-		    console.log('Creating the leaflet control');
-		    L.control.layers(null,overlayMap, {collapsed:false}).addTo(self.map);
+		drawControl(geo_code, geo_level, geo_version).then(function(result){
+		    console.log(result);
 		});
 		
 	    }else{
@@ -49,23 +48,22 @@ ProfileMaps = function() {
           
         }
     };
-
-    this.drawControl = async function(geo_code, geo_level,geo_version, fn){
-	var overlayMap = {};
-	GeometryLoader.subPlaceLayers(geo_code, geo_level, geo_version,function(geojson){
+    async function drawControl(geo_code, geo_level, geo_version){
+	//var overlayMap = {};
+	var layerControl = L.control.layers(null, null, {collapased: false}).addTo(self.map);
+	await GeometryLoader.subPlaceLayers(geo_code, geo_level, geo_version, function(geojson){
 	    var layer = self.drawGeoFeatures(geojson);
-	    overlayMap['Subplace'] = layer;
-	    GeometryLoader.wardLayers(geo_code, geo_level, geo_version,function(geojson){
-		var layer = self.drawGeoFeatures(geojson);
-		overlayMap['Ward'] = layer;
-		GeometryLoader.informalSettlementLayers(geo_code, geo_level, geo_version,function(geojson){
-		var layer = self.drawGeoFeatures(geojson);
-		overlayMap['Informal Settlement'] = layer;
-		fn(overlayMap);
-	    });
-	    });
+	    layerControl.addOverlay(layer, 'Subplace');
 	});
-	
+	await GeometryLoader.wardLayers(geo_code, geo_level, geo_version, function(geojson){
+	    var layer = self.drawGeoFeatures(geojson);
+	    layerControl.addOverlay(layer, 'Ward');
+	});
+	await GeometryLoader.informalSettlementLayers(geo_code, geo_level, geo_version, function(geojson){
+	    var layer = self.drawGeoFeatures(geojson);
+	    layerControl.addOverlay(layer, 'Informal Settlement');
+	});
+	return 'complete';
     };
 
     this.drawGeoFeatures = function(features) {
