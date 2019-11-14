@@ -126,7 +126,7 @@ uncomment for separate inclusion into embed iframes */
  * see http://stackoverflow.com/questions/6553439/div-background-color-in-print-page-dont-work */
 @media print {
   .bar .area,
-  .column .area {
+.column .area {
     box-shadow: inset 0 0 0 1000px grey; } }
 
 .column .label,
@@ -576,8 +576,8 @@ section.chart-divider h2 {
   .chart-get-data {
     display: inline-block; }
   .column-chart,
-  .bar-chart,
-  .pie-chart {
+.bar-chart,
+.pie-chart {
     padding-bottom: 3em; } }
 
 @media only screen and (max-width: 480px) {
@@ -946,7 +946,7 @@ uncomment for separate inclusion into embed iframes */
  * see http://stackoverflow.com/questions/6553439/div-background-color-in-print-page-dont-work */
 @media print {
   .bar .area,
-  .column .area {
+.column .area {
     box-shadow: inset 0 0 0 1000px grey; } }
 
 .column .label,
@@ -1396,8 +1396,8 @@ section.chart-divider h2 {
   .chart-get-data {
     display: inline-block; }
   .column-chart,
-  .bar-chart,
-  .pie-chart {
+.bar-chart,
+.pie-chart {
     padding-bottom: 3em; } }
 
 @media only screen and (max-width: 480px) {
@@ -3782,7 +3782,7 @@ blockquote {
 /* END: @media only screen and (max-width: 1139px) */
 @media only screen and (max-width: 768px) {
   article,
-  article.column-full {
+article.column-full {
     margin-bottom: 2em; }
   header.section-contents {
     float: none;
@@ -3830,8 +3830,8 @@ blockquote {
   #chosen-table h2 {
     padding-left: 0; }
   .column-full,
-  .column-golden-wide,
-  .column-golden-narrow {
+.column-golden-wide,
+.column-golden-narrow {
     float: none;
     clear: both;
     width: auto;
@@ -3860,7 +3860,7 @@ blockquote {
     padding: 1em .25em;
     margin-top: 0; }
   #homepage #profile h1,
-  #homepage #explore h1 {
+#homepage #explore h1 {
     float: none;
     width: auto; }
   #homepage #geography-select {
@@ -3901,7 +3901,7 @@ blockquote {
   #menu input {
     margin-left: 0; }
   #menu input,
-  #menu .tt-dropdown-menu {
+#menu .tt-dropdown-menu {
     width: 100%; }
   #menu .tool-group {
     width: 47%; }
@@ -3912,20 +3912,20 @@ blockquote {
   #menu .tt-dropdown-menu {
     height: 200px; }
   .section-container section,
-  .stat-row [class^="column-"] {
+.stat-row [class^="column-"] {
     margin-bottom: 2em; }
   .stat-row [class^="column-"]:last-child {
     margin-bottom: 0; }
   .column-half,
-  .column-two-thirds,
-  .column-third,
-  .column-three-quarters {
+.column-two-thirds,
+.column-third,
+.column-three-quarters {
     float: none;
     clear: both;
     width: auto;
     margin-right: 0; }
   .column-quarter,
-  .column-third.card {
+.column-third.card {
     float: left;
     clear: none;
     width: 47%;
@@ -3935,32 +3935,32 @@ blockquote {
   #page-footer li {
     margin-bottom: .5em; }
   #geography-picker .column-quarter,
-  #query-geography-picker .column-quarter {
+#query-geography-picker .column-quarter {
     width: 100%;
     font-size: 1.2em; }
   #geography-picker #sumlevs-standard,
-  #query-geography-picker #sumlevs-standard {
+#query-geography-picker #sumlevs-standard {
     float: left;
     padding-right: 3em;
     margin-top: 0; }
   #geography-picker #sumlevs-schools,
-  #query-geography-picker #sumlevs-schools {
+#query-geography-picker #sumlevs-schools {
     margin-top: 1.4em; }
   #profile #query-topic-picker .typeahead-container,
-  #profile #compare-place-picker .typeahead-container {
+#profile #compare-place-picker .typeahead-container {
     display: block;
     padding: 0 .75em; }
   #profile #query-topic-picker h2,
-  #profile #compare-place h2 {
+#profile #compare-place h2 {
     position: relative;
     margin-bottom: .33em; }
   #geography-picker li,
-  #query-geography-picker li {
+#query-geography-picker li {
     margin-bottom: .67em; }
   #query-topic .query-chosen,
-  #query-geographies .query-chosen,
-  #query-release .query-chosen,
-  #query-go .query-chosen {
+#query-geographies .query-chosen,
+#query-release .query-chosen,
+#query-go .query-chosen {
     margin-left: 6em; }
   #query-builder-bar [id^="query-"] {
     margin-top: .5em; }
@@ -3978,9 +3978,9 @@ blockquote {
 /* END: @media only screen and (max-width: 640px) */
 @media only screen and (max-width: 480px) {
   .column-third,
-  .column-half .column-half,
-  .column-quarter,
-  .column-third.card {
+.column-half .column-half,
+.column-quarter,
+.column-third.card {
     float: none;
     clear: both;
     width: auto;
@@ -4007,7 +4007,7 @@ blockquote {
   h1.article-header {
     font-size: 2.2em; }
   #homepage #geography-select,
-  #homepage #topic-select {
+#homepage #topic-select {
     font-size: 1.2em; }
   .callout h3 {
     font-size: 21px; }
@@ -4242,148 +4242,4 @@ header.section-contents h1 a {
   margin-right: 0;
   font-size: 1em; }
 
-/* Define the styles to use accross all the instances of Wazimap-ZA*/
-.video-wrapper {
-  position: relative;
-  padding-bottom: 56.25%;
-  /* 16:9 */
-  padding-top: 25px;
-  height: 0; }
-
-#help .video-wrapper {
-  margin-bottom: 40px; }
-
-.video-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%; }
-
-.map-header-help i {
-  float: right;
-  font-size: 20px;
-  line-height: 20px; }
-
-.wazi-lightbox .featherlight-content {
-  background: #f7f8f3; }
-
-.wazi-lightbox .featherlight-close {
-  background: #1a9d95;
-  color: #fff; }
-
-.wazi-lightbox .lightbox-intro {
-  margin: 10px 25px;
-  display: inline-block; }
-
-.wazi-lightbox hr {
-  border-color: #1a9d95; }
-
-#profile.profile-head2head-frame .floating-nav-wrapper {
-  display: none; }
-
-#profile .floating-nav-wrapper {
-  height: 55px; }
-
-#profile .floating-nav {
-  z-index: 1500;
-  width: 100%;
-  padding: 0.5em;
-  background-color: #e0e4d4; }
-
-#profile .floating-nav.affix {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25); }
-
-#profile .floating-nav h3 {
-  margin-bottom: 0.5em;
-  display: none; }
-
-#profile .floating-nav h3 img {
-  width: auto;
-  height: 17px;
-  margin-right: 10px;
-  vertical-align: text-bottom; }
-
-#profile .floating-nav.affix h3 {
-  display: block; }
-
-#profile .floating-nav ul {
-  margin: 0px;
-  padding: 0px; }
-
-#profile .floating-nav li {
-  display: inline-block;
-  float: left;
-  margin-right: 20px;
-  text-align: center; }
-
-#profile .floating-nav li a {
-  display: block;
-  text-decoration: none; }
-
-#profile .floating-nav li a span {
-  display: block; }
-
-#profile .floating-nav li a .fa {
-  font-size: 18px; }
-
-@media only screen and (max-width: 768px) {
-  #profile .floating-nav-wrapper {
-    display: none; } }
-
-#banner {
-  background-color: #f55b2c;
-  color: white; }
-
-#banner a {
-  color: white;
-  font-weight: bold; }
-
-button.action-button {
-  padding: 5px 8px;
-  border: 0px; }
-
-.fa.fa-child.fa-tiny {
-  font-size: 12px !important; }
-
-.showcase {
-  margin-top: 15px; }
-
-.showcase img {
-  width: 100%;
-  margin-bottom: 15px; }
-
-.showcase a {
-  text-decoration: none; }
-
-#citations h2 {
-  padding-left: 0.8em;
-  font-size: 1em; }
-
-#citations ul {
-  font-size: 0.8em;
-  list-style: none;
-  margin-bottom: 30px;
-  padding-left: 1em; }
-  #citations ul li {
-    margin-bottom: 5px; }
-
-.chart-qualifier {
-  margin: 0.3em 0.5em 0; }
-
-#cover-profile .release-list {
-  margin-left: 5px; }
-  #cover-profile .release-list ul {
-    font-size: 1em; }
-  #cover-profile .release-list a {
-    margin-top: 0; }
-
-#change-release {
-  padding-left: 0.8em;
-  margin-bottom: 1em; }
-  #change-release .release-name {
-    margin-right: 1em; }
+/*# sourceMappingURL=wazimap.css.map */
