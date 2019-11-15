@@ -20,8 +20,6 @@ from wazimap import urls
 from data_manager import urls as data_manager_urls
 from .profiles import views
 
-from wkhtmltopdf.views import PDFTemplateView
-
 STANDARD_CACHE_TIME = settings.WAZIMAP["cache_secs"]
 GEOGRAPHY_LEVELS = "|".join(settings.WAZIMAP["levels"].keys())
 PROFILES_GEOGRAPHY_REGEX = r"profiles/(?P<geography_id>[{}]+-\w+)(-(?P<slug>[\w-]+))?\.pdf".format(
