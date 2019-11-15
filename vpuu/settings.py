@@ -135,4 +135,8 @@ TEMPLATES = [
 ]
 
 
-WKHTMLTOPDF_CMD_OPTIONS = {"print-media-type": True, "encoding": "utf8"}
+WKHTMLTOPDF_CMD_OPTIONS = {
+    "print-media-type": True,
+    "cookie": "document print",
+    "debug-javascript": True,
+}
