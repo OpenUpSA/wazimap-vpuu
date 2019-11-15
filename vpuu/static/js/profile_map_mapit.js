@@ -1,5 +1,9 @@
 // extend the default Wazimap ProfileMaps object to add mapit support
+var is_print_cookie = false;
 
+var cookies = document.cookie;
+if (!cookies.includes('print')){
+        
 var BaseProfileMaps = ProfileMaps;
 ProfileMaps = function() {
     var self = this;
@@ -131,4 +135,5 @@ ProfileMaps = function() {
             });
         }
     };
+};
 };
