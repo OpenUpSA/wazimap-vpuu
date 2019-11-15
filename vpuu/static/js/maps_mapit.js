@@ -165,4 +165,7 @@ function MapItGeometryLoader() {
     };
 }
 
-GeometryLoader = new MapItGeometryLoader();
+var cookies = document.cookie;
+if (!cookies.includes('print')){
+    GeometryLoader = new MapItGeometryLoader();
+}    
