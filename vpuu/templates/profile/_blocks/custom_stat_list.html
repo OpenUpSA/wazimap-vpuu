@@ -30,8 +30,10 @@
     <div class="indicator__value__label">
 	{% if stat.type == 'name' %}
 	{{stat.summary}}
+	{% elif stat.type == 'percentage' %}
+	{{ stat.summary }}
 	{% else %}
-	{{ stat.name }}
+	{{stat.name}}
 	{% endif %}
     </div>
 </div>
