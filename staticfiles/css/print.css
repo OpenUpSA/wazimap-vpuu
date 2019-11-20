@@ -79,9 +79,6 @@ footer {
   padding: 5px !important;
   page-break-inside: avoid; }
 
-.chart__block {
-  margin: 5px !important; }
-
 .charts_container {
   display: block !important; }
 
@@ -90,3 +87,5 @@ footer {
 
 bar .area, .column .area {
   box-shadow: inset 0 0 0 1000px teal; }
+
+/*# sourceMappingURL=print.css.map */

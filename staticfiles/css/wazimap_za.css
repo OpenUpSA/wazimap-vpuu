@@ -127,7 +127,7 @@ uncomment for separate inclusion into embed iframes */
 @media print {
   .bar .area,
   .column .area {
-    box-shadow: inset 0 0 0 1000px grey; } }
+    box-shadow: inset 0 0 0 500px grey; } }
 
 .column .label,
 .column-group .label {
@@ -947,7 +947,7 @@ uncomment for separate inclusion into embed iframes */
 @media print {
   .bar .area,
   .column .area {
-    box-shadow: inset 0 0 0 1000px grey; } }
+    box-shadow: inset 0 0 0 500px grey; } }
 
 .column .label,
 .column-group .label {
@@ -4387,3 +4387,5 @@ button.action-button {
   margin-bottom: 1em; }
   #change-release .release-name {
     margin-right: 1em; }
+
+/*# sourceMappingURL=wazimap_za.css.map */
