@@ -84,7 +84,6 @@ footer {
 
 .sub-section {
   margin-bottom: 0;
-  padding-top: 5px !important;
   padding-bottom: 0 !important;
   page-break-after: always;
 }
@@ -98,16 +97,16 @@ footer {
 }
 
 .chart__container {
-  padding: 5px !important;
+  padding: 0px !important;
   page-break-inside: avoid;
 }
 
-// .chart__block {
-//   margin: 5px !important;
-// }
+.chart__block {
+  margin: 0px !important;
+}
 
 .charts_container {
-  display: block !important;
+    display: inline-block;
 }
 
 .page-options {
@@ -115,4 +114,27 @@ footer {
 }
 bar .area, .column .area {
     box-shadow: inset 0 0 0 1000px teal;
+}
+
+.grid__module_col{
+    display: inline-block;
+    max-width: 100%;
+    flex: 1 !important;
+}
+
+.charts__container{
+    margin-right:0px;
+    margin-left:0px;
+}
+.chart__container--half-width{
+    width:100%;
+    padding: 12px;
+    webkit-box-flex:0;
+    flex: 0 0 auto;
+}
+
+.sub-section-header__title{
+    display:inline-block;
+    width:100%;
+    flex:0;
 }
