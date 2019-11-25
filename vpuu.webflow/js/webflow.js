@@ -2490,7 +2490,7 @@ Webflow.define('dropdown', module.exports = function ($, _) {
     data.toggle.attr('aria-controls', listId);
     data.toggle.attr('aria-haspopup', 'menu');
     data.toggle.on('keyup', makeToggleKeyupHandler(data));
-    $el.attr('aria-labelled-by', toggleId); // Hide focus outline (temporarily, until more widespread a11y
+    $el.attr('aria-labelledby', toggleId); // Hide focus outline (temporarily, until more widespread a11y
     // support and communication)
 
     data.toggle.css('outline', 'none');
@@ -2750,8 +2750,6 @@ Webflow.define('dropdown', module.exports = function ($, _) {
             return;
           }
 
-        case KEY_CODES.ENTER:
-        case KEY_CODES.SPACE:
         case KEY_CODES.ESCAPE:
           {
             close(data, {
@@ -2840,7 +2838,6 @@ Webflow.define('dropdown', module.exports = function ($, _) {
       case KEY_CODES.END:
       case KEY_CODES.ARROW_DOWN:
       case KEY_CODES.ARROW_UP:
-      case KEY_CODES.SPACE:
         {
           return evt.preventDefault(); // Prevent default scroll behaviors
         }
