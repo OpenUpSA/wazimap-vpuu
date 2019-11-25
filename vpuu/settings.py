@@ -136,9 +136,7 @@ TEMPLATES = [
 
 
 WKHTMLTOPDF_CMD_OPTIONS = {
-    "cookie": "document print",
     "print-media-type": True,
-    "viewport-size": "1280x1024",
     "debug-javascript": True,
     "run-script": "javascript:(makeCharts())",
 }
