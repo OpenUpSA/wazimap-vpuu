@@ -96,18 +96,13 @@ footer {
   padding-top: 0 !important;
 }
 
+.sub-section__heading{
+    width:100% !important;
+}
 .chart__container {
-  padding: 0px !important;
   page-break-inside: avoid;
 }
 
-.chart__block {
-  margin: 0px !important;
-}
-
-.charts_container {
-    display: inline-block;
-}
 
 .page-options {
   display: none !important;
@@ -116,33 +111,32 @@ bar .area, .column .area {
     box-shadow: inset 0 0 0 1000px teal;
 }
 
-.grid__module_col{
-    display: inline-block;
-    max-width: 100%;
-    flex: 1 !important;
-}
-
-.charts__container{
-    margin-right:0px;
-    margin-left:0px;
-}
-.chart__container--half-width{
-    display:inline-block;
-    width:100%;
-    padding: 12px;
-    webkit-box-flex:0;
-    flex: 0 0 auto;
-}
-.chart__container--full-width{
-    display:inline-block;
-    width:100%;
-    padding: 12px;
-    webkit-box-flex:0;
-    flex: 0 0 auto;
-}
 
 .sub-section-header__title{
     display:inline-block;
     width:100%;
     flex:0;
+}
+
+
+.grid__module_col{
+    -webkit-flex-box:0;
+}
+
+
+#header-print{
+    display: block;
+}
+
+
+#noprint{
+    display:none;
+}
+
+#chart-print{
+     display:block;
+ }
+
+.container_copy{
+    width:100%;
 }
