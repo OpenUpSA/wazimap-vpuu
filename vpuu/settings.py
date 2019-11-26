@@ -138,5 +138,5 @@ TEMPLATES = [
 WKHTMLTOPDF_CMD_OPTIONS = {
     "print-media-type": True,
     "debug-javascript": True,
-    "run-script": "javascript:(makeCharts())",
+    "run-script": "javascript:($(function(){window.browserWidth=1920;window.browserHeight=1080;makeCharts();cloneCharts()}))",
 }
