@@ -103,7 +103,8 @@ bar .area, .column .area {
 #chart-print {
   display: block; }
 
-.container_copy {
-  width: 100%; }
+.grid__module_row.container_copy {
+  width: 100%;
+  display: block; }
 
 /*# sourceMappingURL=print.css.map */
