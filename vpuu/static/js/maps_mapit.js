@@ -82,7 +82,7 @@ function MapItGeometryLoader() {
 
         url = url + '?generation=' + generation;
         if (simplify) {
-            url = url + '&simplify_tolerance=' + simplify;
+            url = url + '&simplify_tolerance=0.0001';
         }
 
         d3.json(this.mapit_url + url, function(error, geojson) {
@@ -98,7 +98,7 @@ function MapItGeometryLoader() {
         var generation = MAPIT.generations[geo_version];
 	
 	var ward_url = '/areas/MDB-levels:' +mapit_type +'-' + geo_code +'|WD' +
-	    '.geojson?generation='+ generation +"&simplify_tolerance=" + mapit_simplify;
+	    '.geojson?generation='+ generation +"&simplify_tolerance=0.0001";
 
 	d3.json(this.mapit_url + ward_url, function(geojson){
 	    var features = _.values(geojson.features);
@@ -112,7 +112,7 @@ function MapItGeometryLoader() {
         var generation = MAPIT.generations[geo_version];
 	
 	var subplace_url = '/areas/MDB-levels:' +mapit_type +'-' + geo_code +'|SP' +
-	    '.geojson?generation='+ generation +"&simplify_tolerance=" + mapit_simplify;
+	    '.geojson?generation='+ generation +"&simplify_tolerance=0.0001";
 
 	d3.json(this.mapit_url + subplace_url, function(geojson){
 	    var features = _.values(geojson.features);
@@ -126,7 +126,7 @@ function MapItGeometryLoader() {
         var generation = MAPIT.generations[geo_version];
 	
 	var ward_url = '/areas/MDB-levels:' +mapit_type +'-' + geo_code +'|IS' +
-	    '.geojson?generation='+ generation +"&simplify_tolerance=" + mapit_simplify;
+	    '.geojson?generation='+ generation +"&simplify_tolerance=0.0001";
 
 	d3.json(this.mapit_url + ward_url, function(geojson){
 	    var features = _.values(geojson.features);
