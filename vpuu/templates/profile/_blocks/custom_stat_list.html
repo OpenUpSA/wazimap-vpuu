@@ -42,9 +42,15 @@
 {% else %}
 <div class="indicator_content">
     {% for sumlev in  WAZIMAP.comparative_levels|parent_geo:geography %}
+    {% if stat_type == 'name' %}
+    <div class="indicator__value_context">
+	{% build_comparative_item sumlev stat 'percentage' geography decimals %}
+    </div>
+    {% else %}
     <div class="indicator__value_context">
 	{% build_comparative_item sumlev stat stat_type geography decimals %}
     </div>
+    {% endif %}
     {% endfor %}
 </div>
 {% endif %}
