@@ -3,6 +3,7 @@ import logging
 from shapely.geometry import asShape
 from wazimap.geo import GeoData as BaseGeoData, LocationNotFound
 from django.conf import settings
+from django.db.models import Q
 
 import requests
 
@@ -101,3 +102,36 @@ class GeoData(BaseGeoData):
                 )
 
         return geos
+
+    def get_locations(self, search_term, levels=None, version=None):
+        """
+        Try to find locations based on a search term, possibly limited
+        to +levels+.
+
+        Returns an ordered list of geo models.
+        """
+        search_term = search_term.strip()
+
+        query = self.geo_model.objects.filter(
+            Q(name__icontains=search_term) | Q(geo_code=search_term.upper())
+        ).distinct("name")
+
+        if version is None:
+            version = self.default_version
+        if version is None:
+            version = self.global_latest_version
+
+        if levels:
+            query = query.filter(geo_level__in=levels)
+
+        # TODO: order by level?
+        level_sort = [
+            "province",
+            "district",
+            "municipality",
+            "subplace",
+            "informalsettlement",
+            "ward",
+        ]
+        objects = sorted(query[:20], key=lambda o: level_sort.index(o.geo_level))
+        return objects
