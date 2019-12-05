@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "dynamic_profile",
     "django.contrib.postgres",
     "wkhtmltopdf",
+    "django_q",
 ] + INSTALLED_APPS
 
 
@@ -117,7 +118,7 @@ FORMAT_MODULE_PATH = "vpuu.formats"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": ["/home/foiuglkj/Workspace/openup/wazimap-vpuu"],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "debug": DEBUG,
@@ -140,4 +141,14 @@ WKHTMLTOPDF_CMD_OPTIONS = {
     "debug-javascript": True,
     "viewport-size": "1920x1080",
     "run-script": "javascript:($(function(){window.browserWidth=1920;window.browserHeight=1080;makeCharts();cloneCharts()}))",
+}
+
+Q_CLUSTER = {
+    "name": "DjangORM",
+    "workers": 2,
+    "timeout": 90,
+    "retry": 120,
+    "queue_limit": 50,
+    "bulk": 10,
+    "orm": "default",
 }
