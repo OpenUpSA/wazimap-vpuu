@@ -13,11 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from django.conf import settings
 from wazimap import urls
-from data_manager import urls as data_manager_urls
 from .profiles import views
 
 STANDARD_CACHE_TIME = settings.WAZIMAP["cache_secs"]
@@ -26,13 +25,14 @@ PROFILES_GEOGRAPHY_REGEX = r"profiles/(?P<geography_id>[{}]+-\w+)(-(?P<slug>[\w-
     GEOGRAPHY_LEVELS
 )
 
-urlpatterns = data_manager_urls.urlpatterns + [
+urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(
         regex="^{}/$".format(PROFILES_GEOGRAPHY_REGEX),
         view=views.ProfilePDFView.as_view(),
         name="profile_pdf",
     ),
+    url("^api/1.0/data/upload", include("data_manager.urls")),
 ]
 
 urlpatterns += urls.urlpatterns
