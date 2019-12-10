@@ -156,3 +156,5 @@ Q_CLUSTER = {
     "bulk": 10,
     "orm": "default",
 }
+
+DYNAMIC_PROFILE_INDICATOR = {"path": "vpuu.profiles.build", "class": "VpuuIndicator"}
