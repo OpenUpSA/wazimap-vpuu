@@ -33,6 +33,7 @@ urlpatterns = [
         name="profile_pdf",
     ),
     url("^api/1.0/data/upload", include("data_manager.urls")),
+    url("^api/1.0/profile/", include("dynamic_profile.urls")),
 ]
 
 urlpatterns += urls.urlpatterns
