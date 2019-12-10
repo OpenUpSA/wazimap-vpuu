@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     "wkhtmltopdf",
     "django_q",
+    "rest_framework",
 ] + INSTALLED_APPS
 
 
