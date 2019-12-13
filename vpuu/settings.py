@@ -144,14 +144,14 @@ WKHTMLTOPDF_CMD_OPTIONS = {
     "print-media-type": True,
     "debug-javascript": True,
     "viewport-size": "1920x1080",
-    "run-script": "javascript:($(function(){window.browserWidth=1920;window.browserHeight=1080;makeCharts();cloneCharts()}))",
+    "run-script": "javascript:($(function(){window.browserWidth=1920;window.browserHeight=1080;makeCharts()}))",
 }
 
 Q_CLUSTER = {
     "name": "DjangORM",
     "workers": 2,
-    "timeout": 90,
-    "retry": 120,
+    "timeout": 600,
+    "retry": 600,
     "queue_limit": 50,
     "bulk": 10,
     "orm": "default",
