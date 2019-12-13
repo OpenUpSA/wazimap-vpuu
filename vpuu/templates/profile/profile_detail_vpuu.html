@@ -251,7 +251,7 @@
 		    <div class="grid__module_col flex">
 			<div class="charts_container">
 			    {% if indicator.children %}
-			    <div class="chart__container--{{indicator.chart_design}}">
+			    <div class="chart__container{{indicator.chart_design}}">
 				<div class="chart__header">
 				    <h4 class="indicator__chart__title">{{indicator.chart_title}}</h4>
 				    <div class="indicator__chart__links">
@@ -293,7 +293,7 @@
 				{% endif %}
 			    </div>
 			    {% for child in indicator.children %}
-			    <div class="chart__container--{{child.chart_design}}">
+			    <div class="chart__container{{child.chart_design}}">
 				<div class="chart__header">
 				    <h4 class="indicator__chart__title">{{child.chart_title}}</h4>
 				    <div class="indicator__chart__links">
@@ -337,7 +337,7 @@
 			    {% endfor %}
 			    {% else %}
 			    {% if indicator.stat_values %}
-			    <div class="chart__container--{{indicator.chart_design}}">
+			    <div class="chart__container{{indicator.chart_design}}">
 				<div class="chart__header">
 				    <h4 class="indicator__chart__title">{{indicator.chart_title}}</h4>
 				    <div class="indicator__chart__links">
