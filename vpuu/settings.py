@@ -144,7 +144,7 @@ WKHTMLTOPDF_CMD_OPTIONS = {
     "print-media-type": True,
     "debug-javascript": True,
     "viewport-size": "1920x1080",
-    "run-script": "javascript:($(function(){window.browserWidth=1920;window.browserHeight=1080;makeCharts()}))",
+    "run-script": "javascript:($(function(){makePrintCharts()}))",
 }
 
 Q_CLUSTER = {
