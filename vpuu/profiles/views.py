@@ -12,11 +12,13 @@ log = logging.getLogger(__name__)
 
 class ProfilePDFView(GeographyDetailView):
     def get(self, request, *args, **kwargs):
-        url = "/profiles/%s-%s-%s/?print=1" % (
-            self.geo_level,
-            self.geo_code,
-            self.geo.slug,
-        )
+        profiles = request.GET.get("profiles")
+        url = f"/profiles/{self.geo_level}-{self.geo_code}-{self.geo.slug}?profiles={profiles}"
+        # url = "/profiles/%s-%s-%s/?print=1" % (
+        #     self.geo_level,
+        #     self.geo_code,
+        #     self.geo.slug,
+        # )
         log.debug(url)
         url = request.build_absolute_uri(url)
         pdf = wkhtmltopdf(url)
