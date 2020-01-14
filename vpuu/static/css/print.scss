@@ -66,7 +66,7 @@ a {
 
 .grid__module_container {
   display: block !important;
-  width: 1140px !important;
+  width: 1920px !important;
   max-width: 100% !important;
   margin-right: auto !important;
   margin-left: auto !important;
@@ -4577,6 +4577,13 @@ bar .area, .column .area {
     width: 100% !important;
     position: relative !important;
 }
+#charts-prints{
+    display:block !important;
+}
+
+#web-no-show{
+    display:none !important;
+}
 .grid__module_col.col_3.col_m_4.col_sm_12.flex{
     display:none !important;
 }
@@ -4586,4 +4593,29 @@ bar .area, .column .area {
 .sub-section {
   page-break-after: always !important;
 }
+.indicator__main.print{
+    width:100% !important;
+}
+
+.indicator__main__item.print{
+    width:100% !important;
+}
+
+.d-block{display: block !important}
+}
+
+.data-nav{
+    display:none !important;
+}
+
+.indicator__chart_links{
+    display:none !important;
+}
+
+#citations{
+    display:none !important;
+}
+
+.footer{
+    display: none !important;
 }
