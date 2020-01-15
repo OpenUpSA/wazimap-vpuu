@@ -4599,6 +4599,9 @@ bar .area, .column .area {
 
 .indicator__main__item.print{
     width:100% !important;
+    border-bottom:none !important;
+    border-right: none !important;
+    
 }
 
 .d-block{display: block !important}
@@ -4618,4 +4621,29 @@ bar .area, .column .area {
 
 .footer{
     display: none !important;
+}
+
+.nav__items{
+    display:none !important;
+}
+.header-nav--profile-page{
+    background-color:#0d0c0c;
+}
+.img{
+    opacity: 1 !important;
+    filter: grayscale(10%);
+}
+.indicator__main__item--last.print{
+    border:none !important
+}
+.location-meta__metric{
+    border-right: none !important;
+}
+
+.indicator__main__item--first.print{
+    border-right: none !important;
+    
+}
+.indicator__main.print{
+    border-bottom:none !important;
 }
