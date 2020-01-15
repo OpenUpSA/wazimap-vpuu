@@ -4647,3 +4647,19 @@ bar .area, .column .area {
 .indicator__main.print{
     border-bottom:none !important;
 }
+#downloadModal{
+    display:none !important;
+}
+.grid__module_row{
+    page-break-inside: avoid !important;
+}
+.indictor__chart_title{
+    letter-spacing: normal;
+}
+.sub-section__heading{
+    letter-spacing: normal !important;
+}
+
+#change-release{
+    display:none !important;
+}
