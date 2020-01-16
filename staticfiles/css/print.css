@@ -3605,4 +3605,7 @@
 #change-release {
   display: none !important; }
 
+.location-meta__place-name__label {
+  white-space: nowrap !important; }
+
 /*# sourceMappingURL=print.css.map */
